@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: frontend
+  name: frontend
+spec:
+  containers:
+    - image: loktionovam/hipster-frontend:v0.0.1
+      name: frontend
+      resources: {}
+      env:
+        - name: PRODUCT_CATALOG_SERVICE_ADDR
+          value: "productcatalogservice:3550"
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
