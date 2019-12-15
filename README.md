@@ -1,8 +1,8 @@
 # loktionovam_platform
 
-master: [![Build Status](https://travis-ci.com/otus-kuber-2019-06/loktionovam_platform.svg?branch=master)](https://travis-ci.com/otus-kuber-2019-06/loktionovam_platform)
+master: [![Build Status](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform.svg?branch=master)](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform)
 
-kubernetes-intro: [![Build Status](https://travis-ci.com/otus-kuber-2019-06/loktionovam_platform.svg?branch=kubernetes-intro)](https://travis-ci.com/otus-kuber-2019-06/loktionovam_platform)
+kubernetes-intro: [![Build Status](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform.svg?branch=kubernetes-intro)](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform)
 
 loktionovam Platform repository
 
