@@ -4,6 +4,8 @@ master: [![Build Status](https://travis-ci.com/otus-kuber-2019-12/loktionovam_pl
 
 kubernetes-intro: [![Build Status](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform.svg?branch=kubernetes-intro)](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform)
 
+kubernetes-controllers: [![Build Status](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform.svg?branch=kubernetes-controllers)](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform)
+
 loktionovam Platform repository
 
 ## Настройка репозитория
