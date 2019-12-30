@@ -6,6 +6,8 @@ kubernetes-intro: [![Build Status](https://travis-ci.com/otus-kuber-2019-12/lokt
 
 kubernetes-controllers: [![Build Status](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform.svg?branch=kubernetes-controllers)](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform)
 
+kubernetes-security: [![Build Status](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform.svg?branch=kubernetes-security)](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform)
+
 loktionovam Platform repository
 
 ## Настройка репозитория
@@ -14,7 +16,8 @@ loktionovam Platform repository
 
 ## Домашние задания
 
-| Выполненные домашние задания                                                                                                               |
-| :----------------------------------------------------------------------------------------------------------------------------------------- |
-| [**EX-2: kubernetes-intro**](doc/ex-2-kubernetes-intro.md)<br/>Настройка локального окружения. Запуск первого контейнера. Работа с kubectl |
-| [**EX-3: kubernetes-controllers**](doc/ex-3-kubernetes-controllers.md)<br/>Kubernetes controllers. ReplicaSet, Deployment, DaemonSet       |
+| Выполненные домашние задания                                                                                                                                          |
+| :-------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [**EX-2: kubernetes-intro**](doc/ex-2-kubernetes-intro.md)<br/>Настройка локального окружения. Запуск первого контейнера. Работа с kubectl                            |
+| [**EX-3: kubernetes-controllers**](doc/ex-3-kubernetes-controllers.md)<br/>Kubernetes controllers. ReplicaSet, Deployment, DaemonSet                                  |
+| [**EX-4: kubernetes-security**](doc/ex-4-kubernetes-security.md)<br/>Настройка аккаунтов и прав для них, настройка ограничений и политик безопасности для контейнеров |
