@@ -8,7 +8,7 @@
     minikube_version: 1.6.1
     k9s_version: 0.7.11
     kube_forwarder_version: 1.2.0
-    kind_version: 0.4.0
+    kind_version: 0.6.1
   tasks:
 
     - name: Download and install kubectl {{ kubectl_version }}

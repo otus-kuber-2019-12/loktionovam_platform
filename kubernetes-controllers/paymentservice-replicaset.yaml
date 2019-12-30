@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: paymentservice
+  labels:
+    app: paymentservice
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: paymentservice
+  template:
+    metadata:
+      labels:
+        app: paymentservice
+    spec:
+      containers:
+        - name: server
+          image: loktionovam/hipster-paymentservice:v0.0.1
+          ports:
+            - containerPort: 50051
+          env:
+            - name: PORT
+              value: "50051"

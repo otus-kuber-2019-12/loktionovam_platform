@@ -4,6 +4,8 @@ master: [![Build Status](https://travis-ci.com/otus-kuber-2019-12/loktionovam_pl
 
 kubernetes-intro: [![Build Status](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform.svg?branch=kubernetes-intro)](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform)
 
+kubernetes-controllers: [![Build Status](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform.svg?branch=kubernetes-controllers)](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform)
+
 loktionovam Platform repository
 
 ## Настройка репозитория
@@ -12,6 +14,7 @@ loktionovam Platform repository
 
 ## Домашние задания
 
-| Выполненные домашние задания                                                                                                         |
-| :----------------------------------------------------------------------------------------------------------------------------------- |
+| Выполненные домашние задания                                                                                                               |
+| :----------------------------------------------------------------------------------------------------------------------------------------- |
 | [**EX-2: kubernetes-intro**](doc/ex-2-kubernetes-intro.md)<br/>Настройка локального окружения. Запуск первого контейнера. Работа с kubectl |
+| [**EX-3: kubernetes-controllers**](doc/ex-3-kubernetes-controllers.md)<br/>Kubernetes controllers. ReplicaSet, Deployment, DaemonSet       |
