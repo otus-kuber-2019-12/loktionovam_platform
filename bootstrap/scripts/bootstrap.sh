@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 # this script configure minimal env to start ansible bootstrap playbook
 
-SCRIPTS_DIR=$(dirname $(realpath "$0"))
+SCRIPTS_DIR="$(dirname "$(realpath "${0}")")"
 ANSIBLE_DIR=${SCRIPTS_DIR}/../ansible
 GENERIC_FUNCTIONS="${SCRIPTS_DIR}"/generic-functions
-SCRIPT_NAME=$(basename $0)
+SCRIPT_NAME=$(basename "${0}")
 
-if [ ! -r "${GENERIC_FUNCTIONS}" ]; then
-  logger --tag ${SCRIPT_NAME} --stderr --id=$$ -p user.err "Can't find ${GENERIC_FUNCTIONS} file. Abort."
+if [[ ! -r "${GENERIC_FUNCTIONS}" ]]; then
+  logger --tag "${SCRIPT_NAME}" --stderr --id=$$ -p user.err "Can't find ${GENERIC_FUNCTIONS} file. Abort."
   exit 2
 fi
 
+# shellcheck source=/dev/null
 source "${GENERIC_FUNCTIONS}"
 
 function show_help {
