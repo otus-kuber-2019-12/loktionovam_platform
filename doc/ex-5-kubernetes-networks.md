@@ -3,6 +3,7 @@
 * [x] Основное задание: работа с тестовым веб-приложением (добавление проверок pod, создание объекта deployment, добавление сервисов в кластер (ClusterIP), включение режима балансировки IPVS)
 * [x] Основное задание: доступ к приложению извне кластера (установка metallb в layer2 режиме, добавление сервиса LoadBalancer, установка Ingress-контроллера и прокси `ingress-nginx`, создание правил `Ingress`)
 * [x] Задание со (*): сделать сервис LoadBalancer, который откроет доступ к CoreDNS снаружи кластера
+* [x] Задание со (*): сделать доступным `dashboard` через nginx ingress
 
 ## EX-5.1 Что было сделано
 
@@ -24,6 +25,18 @@ livenessProbe:
 ```
 
 ## EX-5.2 Как запустить проект
+
+```bash
+minikube start
+minikube addons disable dashboard
+kubectl delete clusterrolebinding kubernetes-dashboard
+kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.8.3/manifests/metallb.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-rc2/aio/deploy/recommended.yaml
+
+find kubernetes-networks -name "*.yaml" -exec kubectl apply -f  '{}' \;
+
+```
 
 ## EX-5.3 Как проверить проект
 
