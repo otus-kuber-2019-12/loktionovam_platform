@@ -9,10 +9,11 @@
 * Написан манифест для создания сервиса типа `ClusterIP` для балансировки трафика приложения web
 * Включено и проверено использование `ipvs` вместо `iptables`
 * Установлен и настроен metallb для создания сервиса типа `LoadBalancer`
-* Написан манифест для 
+* (*) Написан манифест для `LoadBalancer`, который выставляет CoreDNS наружу кластера
 * В проект добавлены линтеры для shell, python, yaml файлов, исправлены предупреждения и ошибки
-* Следующая конфигурация валидна и проверка всегда (если в контейнере есть шелл, `ps`, `grep`) будет иметь код возврата `0`. 
-  
+* Добавлены манифесты для `nginx ingress` работающего через `MetalLB` и проксирующего запросы на web приложение
+* Следующая конфигурация валидна и проверка всегда (если в контейнере есть шелл, `ps`, `grep`) будет иметь код возврата `0`
+
 ```yaml
 livenessProbe:
   exec:
@@ -29,20 +30,17 @@ livenessProbe:
 * Проверка доступности DNS:
 
   ```bash
-  # Получить адрес DNS сервера
-  export EXTERNAL_DNS=$(kubectl get svc -n kube-system dns-svc-lb-udp -o jsonpath='{.status.loadBalancer.ingress[*].ip}')
-  host web-svc-cip.default.svc.cluster.local "${EXTERNAL_DNS}"  
+  misc/scripts/check_external_dns_address.sh
+  # Если DNS доступен снаружи, то скрипт выведет 'External CoreDNS is OK'
+  web-svc-cip.default.svc.cluster.local has address 10.96.229.152
+  External CoreDNS is OK
   ```
 
+* Проверка доступности `web` приложения:
+
   ```bash
-  # Проверить, что DNS работает
-  Using domain server:
-  Name: 172.17.255.2
-  Address: 172.17.255.2#53
-  Aliases:
-
-  web-svc-cip.default.svc.cluster.local has address 10.96.229.152
-
+  misc/scripts/check_nginx_ingress_web.sh
+  'Web' application is OK via nginx ingress
   ```
 
 ## EX-5.4 Как начать пользоваться проектом
