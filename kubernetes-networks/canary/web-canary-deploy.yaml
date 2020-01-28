@@ -2,13 +2,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web-v1
+  name: web-v2
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: web
-      version: v1
+      version: v2
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -19,11 +19,11 @@ spec:
       name: web
       labels:
         app: web
-        version: v1
+        version: v2
     spec:
       containers:
         - name: web
-          image: loktionovam/web:1.17.1-alpine
+          image: loktionovam/web-python:latest
           volumeMounts:
             - name: app
               mountPath: /app

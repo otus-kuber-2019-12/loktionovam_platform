@@ -6,6 +6,7 @@ metadata:
 spec:
   selector:
     app: web
+    version: v1
   type: ClusterIP
   clusterIP: None
   ports:
