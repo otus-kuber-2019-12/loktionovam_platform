@@ -7,8 +7,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: web
-      version: v2
+      app: web-v2
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -18,8 +17,7 @@ spec:
     metadata:
       name: web
       labels:
-        app: web
-        version: v2
+        app: web-v2
     spec:
       containers:
         - name: web

@@ -5,8 +5,7 @@ metadata:
   name: web-svc-v2
 spec:
   selector:
-    app: web
-    version: v2
+    app: web-v2
   type: ClusterIP
   clusterIP: None
   ports:

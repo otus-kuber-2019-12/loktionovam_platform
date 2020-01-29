@@ -76,7 +76,7 @@ find kubernetes-networks -name "*.yaml" -exec kubectl apply -f  '{}' \;
 
   ```bash
   misc/scripts/check_nginx_ingress_web.sh
-  'Web' application (v1) is OK via nginx ingress
+  'Web' application (prod) is OK via nginx ingress
   ```
 
 * Проверка доступности канареечного развертывания `web` приложения:

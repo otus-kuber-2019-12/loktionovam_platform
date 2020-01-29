@@ -2,13 +2,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web-v1
+  name: web
 spec:
   replicas: 3
   selector:
     matchLabels:
       app: web
-      version: v1
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -19,7 +18,6 @@ spec:
       name: web
       labels:
         app: web
-        version: v1
     spec:
       containers:
         - name: web

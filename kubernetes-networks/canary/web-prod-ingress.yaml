@@ -2,12 +2,16 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: web
+  name: web-prod
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - http:
+    # Use host based routing here, due to error
+    # 'cannot merge alternative backend
+    # default-web-svc-v2-8000 into hostname  that does not exist'
+    - host: web
+      http:
         paths:
           - path: /web
             backend:
