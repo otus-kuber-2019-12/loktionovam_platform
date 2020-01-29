@@ -14,13 +14,13 @@
 * Запущен **replicaset** для **hipster-frontend**, проверено обновление репликасета, проверено автоматический перезапуск подов при удалении.
   Почему обновление **ReplicaSet** не повлекло обновление запущенных **pod**: из документации к **ReplicaSet**
   <https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/#example>
-  
+
   ```plain
   Once the original is deleted, you can create a new ReplicaSet to replace it. As long as the old and new .spec.selector are the same,
   then the new one will adopt the old Pods. However, it will not make any effort to make existing Pods match a new, different pod template.
   To update Pods to a new spec in a controlled way, use a Deployment, as ReplicaSets do not support a rolling update directly.
   ```
-  
+
   то есть **ReplicaSet** не умеет обновлять существующие **Pod** при изменении тэга образа. Для этих целей, нужно использовать **Deployment**.
 
 * Запущен **deployment** для **hipster-frontend**, проверено обновление деплоймента.
@@ -29,23 +29,23 @@
 * Проверено обновление "плохого" приложения, через изменение **readiness probe** для **hipster-frontend**
 * Написан DaemonSet манифест для node-exporter с поддержкой развертывания на control plane ноды:
   **Control plane nodes** имеют такой **taints**:
-  
+
   ```yaml
       taints:
       - effect: NoSchedule
         key: node-role.kubernetes.io/master
   ```
-  
+
   который означает, что **pod** не будет запланирован на master нодах.
-  
+
   Из документации по **Taints and Tolerations** <https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/>:
-  
+
   ```plain
   The taint has key key, value value, and taint effect NoSchedule. This means that no pod will be able to schedule onto node1 unless it has a matching toleration.
   ```
-  
+
   то есть, чтобы отключить **NoSchedule**, и запустить **pod** на master нодах, то нужно добавить **tolerations**:
-  
+
   ```yaml
         tolerations:
           - key: node-role.kubernetes.io/master
@@ -65,9 +65,9 @@ kubectl apply -f node-exporter-daemonset.yaml
 ## EX-3.3 Как проверить проект
 
 * Проверить запущенные deployment:
-  
+
   ```bash
-  kubectl get deployments.apps 
+  kubectl get deployments.apps
   NAME             READY   UP-TO-DATE   AVAILABLE   AGE
   frontend         3/3     3            3           123m
   paymentservice   3/3     3            3           3h20m
@@ -76,7 +76,7 @@ kubectl apply -f node-exporter-daemonset.yaml
 * Проверить запущенные daemonset:
 
   ```bash
-  kubectl get daemonsets.apps 
+  kubectl get daemonsets.apps
   NAME            DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
   node-exporter   6         6         6       6            6           <none>          101m
   ```
