@@ -45,7 +45,7 @@ exec_cmd "sudo dpkg-reconfigure locales" \
 exec_cmd "cd ${ANSIBLE_DIR}" \
 		"Enter to ${ANSIBLE_DIR} directory"
 
-exec_cmd "virtualenv .venv" \
+exec_cmd "virtualenv --system-site-packages -p python3 .venv" \
 		"Create virtual environment"
 
 exec_cmd "source .venv/bin/activate" \
