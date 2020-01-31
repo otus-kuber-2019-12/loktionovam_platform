@@ -5,9 +5,9 @@ metadata:
   name: ken-view
   namespace: dev
 subjects:
-- kind: ServiceAccount
-  name: ken
-  apiGroup: ""
+  - kind: ServiceAccount
+    name: ken
+    apiGroup: ""
 roleRef:
   kind: Role
   name: view

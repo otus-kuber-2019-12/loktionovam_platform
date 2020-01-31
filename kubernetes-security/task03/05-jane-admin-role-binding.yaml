@@ -5,9 +5,9 @@ metadata:
   name: jane-admin
   namespace: dev
 subjects:
-- kind: ServiceAccount
-  name: jane
-  apiGroup: ""
+  - kind: ServiceAccount
+    name: jane
+    apiGroup: ""
 roleRef:
   kind: Role
   name: admin

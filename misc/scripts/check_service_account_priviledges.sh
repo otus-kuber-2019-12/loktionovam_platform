@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
 # set -x
-VERB_LIST="create delete deletecollection get list patch update watch"
-SCRIPT_NAME=$(basename $0)
+VERB_LIST=(
+    create
+    delete
+    deletecollection
+    get
+    list
+    patch
+    update
+    watch
+    )
+SCRIPT_NAME="$(basename "${0}")"
 
 function show_help {
 cat << EOF
@@ -29,7 +38,7 @@ while getopts ":n:s:h" OPTION; do
     esac
 done
 
-for VERB in $VERB_LIST; do
+for VERB in ${VERB_LIST[*]}; do
     echo -n "$SERVICE_ACCOUNT can $VERB in $NAMESPACE: "
-    kubectl auth can-i $VERB '*' --as $SERVICE_ACCOUNT -n $NAMESPACE
+    kubectl auth can-i "${VERB}" '*' --as "${SERVICE_ACCOUNT}" -n "${NAMESPACE}"
 done

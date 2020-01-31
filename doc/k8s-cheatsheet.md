@@ -28,7 +28,7 @@ kind create cluster --config bootstrap/k8s/kind-config.yaml
   ```bash
   kubectl apply -f some_manifest.yaml
   kubectl create -f some_manifest.yaml
-  
+
   kubectl delete pod web
   kubectl delete pod --all
   ```

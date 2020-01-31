@@ -8,6 +8,6 @@ roleRef:
   kind: ClusterRole
   name: admin
 subjects:
-- kind: ServiceAccount
-  name: bob
-  namespace: default
+  - kind: ServiceAccount
+    name: bob
+    namespace: default

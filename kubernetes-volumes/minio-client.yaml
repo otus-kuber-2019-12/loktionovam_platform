@@ -1,0 +1,31 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: minio-client
+spec:
+  containers:
+    - image: minio/mc
+      name: minio-client
+      command:
+        - 'sh'
+        - '-c'
+        - 'mc config host add  minio http://minio:9000 ${MINIO_ACCESS_KEY} ${MINIO_SECRET_KEY} && sleep 100000'  # yamllint disable rule:line-length
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+      env:
+        - name: MINIO_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: minio-secret
+              key: minio_access_key
+        - name: MINIO_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: minio-secret
+              key: minio_secret_key
