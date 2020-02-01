@@ -12,6 +12,8 @@ kubernetes-networks: [![Build Status](https://travis-ci.com/otus-kuber-2019-12/l
 
 kubernetes-volumes: [![Build Status](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform.svg?branch=kubernetes-volumes)](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform)
 
+kubernetes-templating: [![Build Status](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform.svg?branch=kubernetes-templating)](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform)
+
 loktionovam Platform repository
 
 ## Настройка репозитория
@@ -27,3 +29,4 @@ loktionovam Platform repository
 | [**EX-4: kubernetes-security**](doc/ex-4-kubernetes-security.md)<br/>Настройка аккаунтов и прав для них, настройка ограничений и политик безопасности для контейнеров |
 | [**EX-5: kubernetes-networks**](doc/ex-5-kubernetes-networks.md)<br/>Сетевое взаимодействие Pod, сервисы                                                              |
 | [**EX-6: kubernetes-volumes**](doc/ex-6-kubernetes-volumes.md)<br/>Volumes, Storages, StatefulSet                                                                     |
+| [**EX-8: kubernetes-templating**](doc/ex-8-kubernetes-templating.md)<br/>Шаблонизация манифестов в Kubernetes                                                         |
