@@ -72,3 +72,30 @@ kind create cluster --config bootstrap/k8s/kind-config.yaml
   ```
 
 ## Helm
+
+* Создание **release**:
+
+  ```bash
+  helm install <chart_name> --name=<release_name>  --namespace=<namespace>
+  kubectl get secrets -n <namespace> | grep <release_name>
+  ```
+
+* Обновление **release**:
+
+  ```bash
+  helm upgrade <release_name> <chart_name> --namespace=<namespace>
+  kubectl get secrets -n <namespace> | grep <release_name>
+  ```
+
+* Создание или обновление **release**:
+
+  ```bash
+  helm upgrade --install <release_name> <chart_name> --namespace=<namespace>
+  ```
+
+* Добавить репозиторий, вывести список репозиториев:
+
+  ```bash
+  helm repo add stable https://kubernetes-charts.storage.googleapis.com
+  helm repo list
+  ```

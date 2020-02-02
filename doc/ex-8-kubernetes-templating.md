@@ -31,6 +31,32 @@
   gcloud beta container clusters get-credentials primary --zone <zone_here>
   ```
 
+* Установить nginx-ingress
+
+  ```bash
+  helm repo add stable https://kubernetes-charts.storage.googleapis.com
+  helm repo list
+  helm upgrade --install nginx-ingress stable/nginx-ingress --wait --namespace=nginx-ingress --version=1.11.1
+  ```
+
+* Установить `cert-manager`
+
+  ```bash
+  helm repo add jetstack https://charts.jetstack.io
+  kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.9/deploy/manifests/00-crds.yaml
+  kubectl create ns cert-manager
+  kubectl label namespace cert-manager certmanager.k8s.io/disable-validation="true"
+  helm upgrade --install cert-manager jetstack/cert-manager --wait --namespace=cert-manager --version=0.9.0
+  kubectl apply -f kubernetes-templating/cert-manager/cluster-issuer.yaml
+  ```
+
+* Установить `chartmuseum`
+
+  ```bash
+  kubectl create ns chartmuseum
+  helm upgrade --install chartmuseum stable/chartmuseum --wait --namespace=chartmuseum --version=2.3.2 -f kubernetes-templating/chartmuseum/values.yaml
+  ```
+
 ## EX-8.3 Как проверить проект
 
 ## EX-8.4 Как начать пользоваться проектом
