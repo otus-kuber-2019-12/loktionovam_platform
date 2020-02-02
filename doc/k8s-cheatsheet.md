@@ -5,6 +5,7 @@
   * [kind](#kind)
   * [kubectl](#kubectl)
   * [Helm](#helm)
+  * [Chartmuseum](#chartmuseum)
 
 ## minikube
 
@@ -99,3 +100,7 @@ kind create cluster --config bootstrap/k8s/kind-config.yaml
   helm repo add stable https://kubernetes-charts.storage.googleapis.com
   helm repo list
   ```
+
+## Chartmuseum
+
+* Работу с `chartmuseum` можно посмотреть в `misc/scripts/check_chartmuseum.sh`

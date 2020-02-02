@@ -11,3 +11,7 @@ ingress:
       path: /
       tls: true
       tlsSecret: letsencrypt-production
+env:
+  open:
+    # Enable API requests to upload charts to chartmuseum
+    DISABLE_API: false
