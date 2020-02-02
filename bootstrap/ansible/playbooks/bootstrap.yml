@@ -14,7 +14,16 @@
     terraform_version: 0.12.20
     tflint_version: 0.14.0
     helm_version: 3.0.3
+    helmfile_version: 0.98.2
   tasks:
+
+    # yamllint disable rule:line-length
+    - name: Install helmfile {{ helmfile_version }}
+      get_url:
+        url: https://github.com/roboll/helmfile/releases/download/v0.98.2/helmfile_linux_amd64
+        dest: /usr/local/bin/helmfile
+        mode: 0755
+      become: true
 
     - name: Install helm {{ helm_version }}
       unarchive:
@@ -25,6 +34,14 @@
         extra_opts:
           - --strip-components=1
       become: true
+
+    - name: Get helm plugins statuses
+      command: helm plugin list
+      register: bootstrap_helm_plugins
+
+    - name: Install helm diff plugin
+      command: helm plugin install https://github.com/databus23/helm-diff --version v3.0.0-rc.7
+      when: 'not "Preview helm upgrade changes as a diff" in bootstrap_helm_plugins.stdout'
 
     # yamllint disable rule:line-length
     - name: Install tflint {{ tflint_version }}

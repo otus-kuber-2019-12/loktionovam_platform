@@ -13,6 +13,8 @@
 * Добавлен манифест `ClusterIssuer` для cert-manager
 * Добавлены `values.yaml` для `chartmuseum`
 * (*) Изучение работы с `chartmuseum`
+* Установлен `harbor` со включенным TLS и валидным сертификатом
+* (*) Написан `helmfile` для установки `nginx-ingress`, `cert-manager`, `harbor`
 
 ## EX-8.2 Как запустить проект
 
