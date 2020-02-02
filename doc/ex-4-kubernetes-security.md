@@ -1,23 +1,29 @@
 # EX-4 Настройка аккаунтов и прав для них, настройка ограничений и политик безопасности для контейнеров
 
+* [EX-4 Настройка аккаунтов и прав для них, настройка ограничений и политик безопасности для контейнеров](#ex-4-%d0%9d%d0%b0%d1%81%d1%82%d1%80%d0%be%d0%b9%d0%ba%d0%b0-%d0%b0%d0%ba%d0%ba%d0%b0%d1%83%d0%bd%d1%82%d0%be%d0%b2-%d0%b8-%d0%bf%d1%80%d0%b0%d0%b2-%d0%b4%d0%bb%d1%8f-%d0%bd%d0%b8%d1%85-%d0%bd%d0%b0%d1%81%d1%82%d1%80%d0%be%d0%b9%d0%ba%d0%b0-%d0%be%d0%b3%d1%80%d0%b0%d0%bd%d0%b8%d1%87%d0%b5%d0%bd%d0%b8%d0%b9-%d0%b8-%d0%bf%d0%be%d0%bb%d0%b8%d1%82%d0%b8%d0%ba-%d0%b1%d0%b5%d0%b7%d0%be%d0%bf%d0%b0%d1%81%d0%bd%d0%be%d1%81%d1%82%d0%b8-%d0%b4%d0%bb%d1%8f-%d0%ba%d0%be%d0%bd%d1%82%d0%b5%d0%b9%d0%bd%d0%b5%d1%80%d0%be%d0%b2)
+  * [EX-4.1 Что было сделано](#ex-41-%d0%a7%d1%82%d0%be-%d0%b1%d1%8b%d0%bb%d0%be-%d1%81%d0%b4%d0%b5%d0%bb%d0%b0%d0%bd%d0%be)
+  * [EX-4.2 Как запустить проект](#ex-42-%d0%9a%d0%b0%d0%ba-%d0%b7%d0%b0%d0%bf%d1%83%d1%81%d1%82%d0%b8%d1%82%d1%8c-%d0%bf%d1%80%d0%be%d0%b5%d0%ba%d1%82)
+  * [EX-4.3 Как проверить проект](#ex-43-%d0%9a%d0%b0%d0%ba-%d0%bf%d1%80%d0%be%d0%b2%d0%b5%d1%80%d0%b8%d1%82%d1%8c-%d0%bf%d1%80%d0%be%d0%b5%d0%ba%d1%82)
+  * [EX-4.4 Как начать пользоваться проектом](#ex-44-%d0%9a%d0%b0%d0%ba-%d0%bd%d0%b0%d1%87%d0%b0%d1%82%d1%8c-%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d1%82%d1%8c%d1%81%d1%8f-%d0%bf%d1%80%d0%be%d0%b5%d0%ba%d1%82%d0%be%d0%bc)
+
 * Основное задание: создать service account bob, дать ему роль admin в рамках всего кластера
-  
+
   Создать service account dave без доступа к кластеру
 
 * Основное задание: создать prometheus namespace
-  
+
   Создать Service Account carol в этом Namespace
-  
+
   Дать всем Service Account в Namespace prometheus возможность делать get, list, watch в отношении Pods всего кластера
 
 * Основное задание: создать dev namespace
-  
+
   Создать Service Account jane в Namespace dev
-  
+
   Дать jane роль admin в рамках Namespace dev
-  
+
   Создать Service Account ken в Namespace dev
-  
+
   Дать ken роль view в рамках Namespace dev
 
 ## EX-4.1 Что было сделано
@@ -34,7 +40,7 @@
 * Написан манифест для создания **ken service account** в **dev namespace**
 * Написан манифест для связывания **ken service account** с ролью view в **dev namespace**
 * Написан скрипт проверки `misc/scripts/check_service_account_priviledges.sh`, который выводит привилегии заданного service account для заданного namespace
-  
+
 ## EX-4.2 Как запустить проект
 
 * Создать **bob и dave** service accounts, добавить для **bob** роль **admin** в рамках всего кластера
@@ -67,7 +73,7 @@
   ```
 
 * Для проверки **jane service account** можно использовать `misc/scripts/check_service_account_priviledges.sh` для dev и default namespaces
-  
+
   ```bash
   # dev namespace
   misc/scripts/check_service_account_priviledges.sh -n dev -s system:serviceaccount:dev:jane
@@ -80,7 +86,7 @@
   system:serviceaccount:dev:jane can update in dev: yes
   system:serviceaccount:dev:jane can watch in dev: yes
   ```
-  
+
   ```bash
   # in default namespace jane can nothing
   misc/scripts/check_service_account_priviledges.sh -n default -s system:serviceaccount:dev:jane

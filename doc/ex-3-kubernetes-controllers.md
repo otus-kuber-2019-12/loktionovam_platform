@@ -1,5 +1,11 @@
 # EX-3 Kubernetes controllers. ReplicaSet, Deployment, DaemonSet
 
+* [EX-3 Kubernetes controllers. ReplicaSet, Deployment, DaemonSet](#ex-3-kubernetes-controllers-replicaset-deployment-daemonset)
+  * [EX-3.1 Что было сделано](#ex-31-%d0%a7%d1%82%d0%be-%d0%b1%d1%8b%d0%bb%d0%be-%d1%81%d0%b4%d0%b5%d0%bb%d0%b0%d0%bd%d0%be)
+  * [EX-3.2 Как запустить проект](#ex-32-%d0%9a%d0%b0%d0%ba-%d0%b7%d0%b0%d0%bf%d1%83%d1%81%d1%82%d0%b8%d1%82%d1%8c-%d0%bf%d1%80%d0%be%d0%b5%d0%ba%d1%82)
+  * [EX-3.3 Как проверить проект](#ex-33-%d0%9a%d0%b0%d0%ba-%d0%bf%d1%80%d0%be%d0%b2%d0%b5%d1%80%d0%b8%d1%82%d1%8c-%d0%bf%d1%80%d0%be%d0%b5%d0%ba%d1%82)
+  * [EX-3.4 Как начать пользоваться проектом](#ex-34-%d0%9a%d0%b0%d0%ba-%d0%bd%d0%b0%d1%87%d0%b0%d1%82%d1%8c-%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d1%82%d1%8c%d1%81%d1%8f-%d0%bf%d1%80%d0%be%d0%b5%d0%ba%d1%82%d0%be%d0%bc)
+
 * [x] Основное задание: написать **ReplicaSet** для **hipster-frontend** и **hipster-paymentservice**. Проверить управление подами через ReplicaSet. Проверить обновление через ReplicaSet, объяснить, почему обновление ReplicaSet не повлекло обновление подов.
 
 * [x] Основное задание: написать **Deployment** для **hipster-frontend** и **hipster-paymentservice**. Проверка **Rolling Update** через написанные деплойменты. Проверка отката.

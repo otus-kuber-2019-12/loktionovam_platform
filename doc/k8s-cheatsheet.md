@@ -1,5 +1,11 @@
 # Шпаргалка по командам
 
+* [Шпаргалка по командам](#%d0%a8%d0%bf%d0%b0%d1%80%d0%b3%d0%b0%d0%bb%d0%ba%d0%b0-%d0%bf%d0%be-%d0%ba%d0%be%d0%bc%d0%b0%d0%bd%d0%b4%d0%b0%d0%bc)
+  * [minikube](#minikube)
+  * [kind](#kind)
+  * [kubectl](#kubectl)
+  * [Helm](#helm)
+
 ## minikube
 
 ```bash
@@ -64,3 +70,5 @@ kind create cluster --config bootstrap/k8s/kind-config.yaml
   # откатиться на 4-ю ревизию
   kubectl rollout undo deployment paymentservice --to-revision 4
   ```
+
+## Helm

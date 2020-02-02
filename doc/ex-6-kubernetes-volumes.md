@@ -1,5 +1,11 @@
 # EX-6 Volumes, Storages, StatefulSet
 
+* [EX-6 Volumes, Storages, StatefulSet](#ex-6-volumes-storages-statefulset)
+  * [EX-6.1 Что было сделано](#ex-61-%d0%a7%d1%82%d0%be-%d0%b1%d1%8b%d0%bb%d0%be-%d1%81%d0%b4%d0%b5%d0%bb%d0%b0%d0%bd%d0%be)
+  * [EX-6.2 Как запустить проект](#ex-62-%d0%9a%d0%b0%d0%ba-%d0%b7%d0%b0%d0%bf%d1%83%d1%81%d1%82%d0%b8%d1%82%d1%8c-%d0%bf%d1%80%d0%be%d0%b5%d0%ba%d1%82)
+  * [EX-6.3 Как проверить проект](#ex-63-%d0%9a%d0%b0%d0%ba-%d0%bf%d1%80%d0%be%d0%b2%d0%b5%d1%80%d0%b8%d1%82%d1%8c-%d0%bf%d1%80%d0%be%d0%b5%d0%ba%d1%82)
+  * [EX-6.4 Как начать пользоваться проектом](#ex-64-%d0%9a%d0%b0%d0%ba-%d0%bd%d0%b0%d1%87%d0%b0%d1%82%d1%8c-%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d1%82%d1%8c%d1%81%d1%8f-%d0%bf%d1%80%d0%be%d0%b5%d0%ba%d1%82%d0%be%d0%bc)
+
 * [x] Основное задание: создание statefulset
 * [x] Задание со (*): использовать `kubernetes secrets` для задания секретных данных в MinIO
 
