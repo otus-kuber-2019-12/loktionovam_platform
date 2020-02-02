@@ -26,6 +26,7 @@
           - --strip-components=1
       become: true
 
+    # yamllint disable rule:line-length
     - name: Install tflint {{ tflint_version }}
       unarchive:
         src: https://github.com/terraform-linters/tflint/releases/download/v{{ tflint_version }}/tflint_linux_amd64.zip
@@ -34,6 +35,7 @@
         remote_src: true
       become: true
 
+    # yamllint disable rule:line-length
     - name: Install terraform {{ terraform_version }}
       unarchive:
         src: https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip
