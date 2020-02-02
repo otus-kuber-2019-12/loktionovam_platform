@@ -1,0 +1,7 @@
+project = "example-project
+
+defaultpool_nodes_count = 1
+
+cluster_name = "example-cluster"
+
+location = "example-location"

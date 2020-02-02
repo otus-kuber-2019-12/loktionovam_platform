@@ -1,0 +1,7 @@
+project = "example-project"
+
+region = "europe-west1"
+
+organization = "otus"
+
+stage = "dev"

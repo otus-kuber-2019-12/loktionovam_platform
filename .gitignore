@@ -1,3 +1,9 @@
 .vscode
 .venv
 .history
+*.tfstate
+*.tfstate.*.backup
+*.tfstate.backup
+*.tfvars
+.terraform/
+
