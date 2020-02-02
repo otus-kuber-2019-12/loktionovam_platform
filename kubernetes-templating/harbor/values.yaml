@@ -1,0 +1,15 @@
+---
+expose:
+  type: ingress
+  tls:
+    secretName: letsencrypt-production
+  ingress:
+    hosts:
+      core: harbor.35.240.65.117.nip.io
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+      certmanager.k8s.io/cluster-issuer: "letsencrypt-production"
+      certmanager.k8s.io/acme-challenge-type: http01
+notary:
+  enabled: false

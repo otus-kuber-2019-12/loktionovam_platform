@@ -19,7 +19,7 @@ variable cluster_name {
 
 variable defaultpool_machine_type {
   description = "Machine type for default pool"
-  default     = "g1-small"
+  default     = "n1-standard-2"
 }
 
 variable defaultpool_machine_size {

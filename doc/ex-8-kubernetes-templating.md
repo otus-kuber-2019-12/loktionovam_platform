@@ -42,6 +42,7 @@
   ```bash
   helm repo add stable https://kubernetes-charts.storage.googleapis.com
   helm repo list
+  kubectl apply -f kubernetes-templating/nginx-ingress/namespace.yaml
   helm upgrade --install nginx-ingress stable/nginx-ingress --wait --namespace=nginx-ingress --version=1.11.1
   ```
 
@@ -50,7 +51,7 @@
   ```bash
   helm repo add jetstack https://charts.jetstack.io
   kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.9/deploy/manifests/00-crds.yaml
-  kubectl create ns cert-manager
+  kubectl apply -f kubernetes-templating/cert-manager/namespace.yaml
   kubectl label namespace cert-manager certmanager.k8s.io/disable-validation="true"
   helm upgrade --install cert-manager jetstack/cert-manager --wait --namespace=cert-manager --version=0.9.0
   kubectl apply -f kubernetes-templating/cert-manager/cluster-issuer.yaml
@@ -59,7 +60,7 @@
 * Установить `chartmuseum`
 
   ```bash
-  kubectl create ns chartmuseum
+  kubectl apply -f kubernetes-templating/chartmuseum/namespace.yaml
   helm upgrade --install chartmuseum stable/chartmuseum --wait --namespace=chartmuseum --version=2.3.2 -f kubernetes-templating/chartmuseum/values.yaml
   ```
 
@@ -71,7 +72,7 @@
   Create test helm package check_chartmuseum
   Creating check_chartmuseum
   Successfully packaged chart and saved it to: /tmp/tmp.yHpOUv1FC0/check_chartmuseum/check_chartmuseum-0.1.0.tgz
-  Upload test helm package check_chartmuseum-0.1.0.tgz to the https://chartmuseum.35.195.194.134.nip.io/api/charts
+  Upload test helm package check_chartmuseum-0.1.0.tgz to the https://chartmuseum.35.240.65.117.nip.io/api/charts
   Get information about uploaded chart
   [
     {
@@ -101,12 +102,20 @@
   ...
   ...
   ...
-  Remove check_chartmuseum from https://chartmuseum.35.195.194.134.nip.io
+  Remove check_chartmuseum from https://chartmuseum.35.240.65.117.nip.io
   {
     "deleted": true
   }
   Remove chartmuseum repo from helm repositories list
   "chartmuseum" has been removed from your repositories
+  ```
+
+* Установить `harbor`
+
+  ```bash
+  helm repo add harbor https://helm.goharbor.io
+  kubectl apply -f kubernetes-templating/harbor/namespace.yaml
+  helm upgrade --install harbor harbor/harbor --atomic --namespace=harbor --version=1.1.2  -f kubernetes-templating/harbor/values.yaml
   ```
 
 ## EX-8.3 Как проверить проект

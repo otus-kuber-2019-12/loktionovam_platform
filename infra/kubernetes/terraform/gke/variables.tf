@@ -19,7 +19,7 @@ variable "cluster_name" {
 
 variable "defaultpool_machine_type" {
   description = "Machine type for default pool"
-  default     = "g1-small"
+  default     = "n1-standard-2"
 }
 
 variable "defaultpool_machine_size" {
@@ -29,7 +29,7 @@ variable "defaultpool_machine_size" {
 
 variable "defaultpool_nodes_count" {
   description = "Cluster nodes count in the default pool"
-  default     = 2
+  default     = 1
 }
 
 variable "min_master_version" {

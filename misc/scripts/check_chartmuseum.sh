@@ -2,7 +2,7 @@
 set -euo pipefail
 
 TEST_CHART_NAME=check_chartmuseum
-CHARTMUSEUM_URL="https://chartmuseum.35.195.194.134.nip.io"
+CHARTMUSEUM_URL="https://chartmuseum.35.240.65.117.nip.io"
 CHARTMUSEUM_API_URL="${CHARTMUSEUM_URL}/api"
 
 # Don't use helm-push plugin. Only curl, only hardcore!
@@ -19,7 +19,7 @@ pushd "$(mktemp -d)"
     fi
 
     echo "Get information about uploaded chart"
-    curl "https://chartmuseum.35.195.194.134.nip.io/api/charts/${TEST_CHART_NAME}" 2> /dev/null | jq .
+    curl "https://chartmuseum.35.240.65.117.nip.io/api/charts/${TEST_CHART_NAME}" 2> /dev/null | jq .
 
     echo "Try to add chartmuseum repo to helm and install test chart"
     helm repo add chartmuseum "${CHARTMUSEUM_URL}"
