@@ -120,6 +120,15 @@
   helm upgrade --install harbor harbor/harbor --atomic --namespace=harbor --version=1.1.2  -f kubernetes-templating/harbor/values.yaml
   ```
 
+* Установить `hipster-shop`
+
+  ```bash
+  kubectl create ns hipster-shop
+  helm upgrade --install hipster-shop --atomic kubernetes-templating/hipster-shop --namespace hipster-shop
+  helm dep update kubernetes-templating/hipster-shop
+  # helm upgrade --install frontend --atomic kubernetes-templating/frontend --namespace hipster-shop
+  ```
+
 ## EX-8.3 Как проверить проект
 
 ## EX-8.4 Как начать пользоваться проектом
