@@ -17,6 +17,32 @@
 * (*) Написан `helmfile` для установки `nginx-ingress`, `cert-manager`, `harbor`
 * Добавлены `hipster-shop` и `frontend` helm chart
 * (*) Использован redis community chart в качестве зависимости для `hipster-shop`
+* Добавлен файл с секретами в `frontend` chart, секрет добавлен в k8s с помощью `helm secrets`, описана работа с секретами.
+
+Описание работы с `helm secrets`:
+
+* Проверить секреты можно командой:
+
+  ```bash
+  get secrets sh.helm.release.v1.frontend.v2  -n hipster-shop  -o=jsonpath='{.data.release}' | base64 --decode
+  ```
+
+* Способ использования в CI/CD аналогичен `ansible-vault` - в репозитории хранятся зашифрованные данные, а в переменных окружения CI/CD есть ключ `(masked, protected)` для расшифровки этих данных в процессе исполнения задач конвейера.
+* Пользоваться секретами, которые "лежат" в репозитории не очень хорошая практика, т.к. можно их случайно закоммитить и придется переписывать историю удаленного репозитория, что может повлиять на остальных участников разработки. С другой стороны, хранить их вне репозитория, может быть неудобно, поэтому как компромиссное решение можно:
+  * Создать каталог `secrets` внутри репозитория в котором будет отдельный `.gitignore`:
+
+    ```bash
+    # считаем, что все данные в этом каталоге не должны попадать в удаленный гит-репозиторий.
+    cat secrets/.gitignore
+    *
+    !.gitignore
+    ```
+
+    Это явно укажет, в каком каталоге секретные данные (не размазывая их по всему репозиторию) и снизит риск случайных ошибок в корневом `.gitignore` файле. Например, если переименовать `secrets` в `ssl`, то исключения для этого каталога сохранятся без дополнительных правок `.gitignore`.
+
+  * Использовать хуки гита, для фильтрации секретных данных <https://github.com/futuresimple/helm-secrets#important-tips>
+
+    Эти два способа можно комбинировать друг с другом.
 
 ## EX-8.2 Как запустить проект
 
@@ -122,13 +148,25 @@
   helm upgrade --install harbor harbor/harbor --atomic --namespace=harbor --version=1.1.2  -f kubernetes-templating/harbor/values.yaml
   ```
 
+* Установить `harbor` с помощью `helmfile`
+
+  ```bash
+  cd kubernetes-templating/helmfile/
+  helmfile --log-level=debug --interactive apply
+  ```
+
 * Установить `hipster-shop`
 
   ```bash
   kubectl create ns hipster-shop
   helm upgrade --install hipster-shop --atomic kubernetes-templating/hipster-shop --namespace hipster-shop
   helm dep update kubernetes-templating/hipster-shop
-  # helm upgrade --install frontend --atomic kubernetes-templating/frontend --namespace hipster-shop
+  ```
+
+* Создать `helm` пакет для `hipster-shop`
+
+  ```bash
+  helm package kubernetes-templating/hipster-shop
   ```
 
 ## EX-8.3 Как проверить проект

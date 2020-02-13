@@ -43,6 +43,11 @@
       command: helm plugin install https://github.com/databus23/helm-diff --version v3.0.0-rc.7
       when: 'not "Preview helm upgrade changes as a diff" in bootstrap_helm_plugins.stdout'
 
+    - name: Install helm secrets plugin
+      command: helm plugin install https://github.com/futuresimple/helm-secrets --version 2.0.2
+      become: true
+      when: 'not "This plugin provides secrets values encryption for Helm charts secure storing" in bootstrap_helm_plugins.stdout'
+
     # yamllint disable rule:line-length
     - name: Install tflint {{ tflint_version }}
       unarchive:

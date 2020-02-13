@@ -6,6 +6,7 @@
   * [kubectl](#kubectl)
   * [Helm](#helm)
   * [Chartmuseum](#chartmuseum)
+  * [Helm secrets](#helm-secrets)
 
 ## minikube
 
@@ -104,3 +105,21 @@ kind create cluster --config bootstrap/k8s/kind-config.yaml
 ## Chartmuseum
 
 * Работу с `chartmuseum` можно посмотреть в `misc/scripts/check_chartmuseum.sh`
+
+## Helm secrets
+
+* Зашифровать файл:
+
+  ```bash
+  gpg --full-generate-key
+  gpg -k
+  sops -e -i --pgp HASH secrets.yaml
+  ```
+
+* Расшифровать файл:
+
+  ```bash
+  sops -d secrets.yaml
+  # or
+  helm secrets view secrets.yaml
+  ```
