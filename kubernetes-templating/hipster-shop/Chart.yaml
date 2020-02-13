@@ -24,3 +24,6 @@ dependencies:
   - name: frontend
     version: 0.1.0
     repository: "file://../frontend"
+  - name: redis
+    version: 10.4.4
+    repository: https://kubernetes-charts.storage.googleapis.com/

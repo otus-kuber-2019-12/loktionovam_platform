@@ -15,6 +15,8 @@
 * (*) Изучение работы с `chartmuseum`
 * Установлен `harbor` со включенным TLS и валидным сертификатом
 * (*) Написан `helmfile` для установки `nginx-ingress`, `cert-manager`, `harbor`
+* Добавлены `hipster-shop` и `frontend` helm chart
+* (*) Использован redis community chart в качестве зависимости для `hipster-shop`
 
 ## EX-8.2 Как запустить проект
 
