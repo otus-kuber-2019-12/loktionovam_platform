@@ -15,7 +15,35 @@
     tflint_version: 0.14.0
     helm_version: 3.0.3
     helmfile_version: 0.98.2
+    kubecfg_version: 0.15.1
+    qbec_version: 0.10.5
+    jsonnet_version: 0.15.0
   tasks:
+
+    # yamllint disable rule:line-length
+    - name: Install jsonnet {{ jsonnet_version }}
+      unarchive:
+        src: https://github.com/google/jsonnet/releases/download/v{{ jsonnet_version }}/jsonnet-bin-v{{ jsonnet_version }}-linux.tar.gz
+        dest: /usr/local/bin
+        mode: 0755
+        remote_src: true
+      become: true
+
+    - name: Install qbec {{ qbec_version }}
+      unarchive:
+        src: https://github.com/splunk/qbec/releases/download/v{{ qbec_version }}/qbec-linux-amd64.tar.gz
+        dest: /usr/local/bin
+        mode: 0755
+        remote_src: true
+      become: true
+
+    # yamllint disable rule:line-length
+    - name: Install kubecfg {{ kubecfg_version }}
+      get_url:
+        url: https://github.com/bitnami/kubecfg/releases/download/v{{ kubecfg_version }}/kubecfg-linux-amd64
+        dest: /usr/local/bin/kubecfg
+        mode: 0755
+      become: true
 
     # yamllint disable rule:line-length
     - name: Install helmfile {{ helmfile_version }}

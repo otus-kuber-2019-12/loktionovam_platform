@@ -1,0 +1,10 @@
+apiVersion: qbec.io/v1alpha1
+kind: App
+metadata:
+  name: adservice
+spec:
+  environments:
+    default:
+      defaultNamespace: hipster-shop
+      server: https://35.195.138.164
+  vars: {}
