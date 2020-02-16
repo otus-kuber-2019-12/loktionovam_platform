@@ -8,7 +8,7 @@
 
 ## EX-8.1 Что было сделано
 
-* В скрипты бутстрапа добавлена установка и настройка gcloud, установка terraform, tflint, helm3
+* В скрипты бутстрапа добавлена установка и настройка gcloud, установка terraform, tflint, helm3, helmfile, kubecfg, qbec, jsonnet
 * Добавлена конфигурация terraform для развертывания GKE
 * Добавлен манифест `ClusterIssuer` для cert-manager
 * Добавлены `values.yaml` для `chartmuseum`
@@ -18,6 +18,9 @@
 * Добавлены `hipster-shop` и `frontend` helm chart
 * (*) Использован redis community chart в качестве зависимости для `hipster-shop`
 * Добавлен файл с секретами в `frontend` chart, секрет добавлен в k8s с помощью `helm secrets`, описана работа с секретами.
+* Сервисы `paymentservice`, `shippingservice` шаблонизированы через `kubecfg`
+* (*) Сервис `adservice` шаблонизирован через `qbec`
+* Сервис `cartservice` шаблонизирован через `kustomize`
 
 Описание работы с `helm secrets`:
 
@@ -160,7 +163,7 @@
   ```bash
   kubectl create ns hipster-shop
   helm upgrade --install hipster-shop --atomic kubernetes-templating/hipster-shop --namespace hipster-shop
-  helm dep update kubernetes-templating/hipster-shop
+  # helm dep update kubernetes-templating/hipster-shop
   ```
 
 * Создать `helm` пакет для `hipster-shop`
@@ -169,6 +172,39 @@
   helm package kubernetes-templating/hipster-shop
   ```
 
+* Установить компоненты магазина `paymentservice`, `shippingservice` через `kubecfg`:
+
+  ```bash
+  cd kubernetes-templating/kubecfg/
+  kubecfg update services.jsonnet --namespace hipster-shop
+  ```
+
+* Установить компоненту магазина `adservice` через `qbec` (краткое `how-to` по `qbec` здесь <https://habr.com/ru/post/481662/#qbec>)
+
+  ```bash
+  cd kubernetes-templating/jsonnet/qbec/adservice/
+  qbec show default
+  qbec apply default
+  ```
+
+* Установить компоненту магазина `cartservice` через `kustomize`
+
+  ```bash
+  kubectl kustomize kubernetes-templating/kustomize/overrides/default/  | kubectl apply -f -
+  ```
+
 ## EX-8.3 Как проверить проект
+
+* `harbor` с загруженными чартами будет доступен по адресу:
+
+  ```bash
+  kubectl get ingress -n harbor  -o jsonpath='{.items[*].spec.rules[*].host}'
+  ```
+
+* `hipster-shop` будет доступен по адресу:
+
+  ```bash
+  kubectl get ingress -n hipster-shop  -o jsonpath='{.items[*].spec.rules[*].host}'
+  ```
 
 ## EX-8.4 Как начать пользоваться проектом
