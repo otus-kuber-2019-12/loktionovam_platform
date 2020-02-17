@@ -1,5 +1,13 @@
 # Шпаргалка по командам
 
+* [Шпаргалка по командам](#%d0%a8%d0%bf%d0%b0%d1%80%d0%b3%d0%b0%d0%bb%d0%ba%d0%b0-%d0%bf%d0%be-%d0%ba%d0%be%d0%bc%d0%b0%d0%bd%d0%b4%d0%b0%d0%bc)
+  * [minikube](#minikube)
+  * [kind](#kind)
+  * [kubectl](#kubectl)
+  * [Helm](#helm)
+  * [Chartmuseum](#chartmuseum)
+  * [Helm secrets](#helm-secrets)
+
 ## minikube
 
 ```bash
@@ -63,4 +71,55 @@ kind create cluster --config bootstrap/k8s/kind-config.yaml
 
   # откатиться на 4-ю ревизию
   kubectl rollout undo deployment paymentservice --to-revision 4
+  ```
+
+## Helm
+
+* Создание **release**:
+
+  ```bash
+  helm install <chart_name> --name=<release_name>  --namespace=<namespace>
+  kubectl get secrets -n <namespace> | grep <release_name>
+  ```
+
+* Обновление **release**:
+
+  ```bash
+  helm upgrade <release_name> <chart_name> --namespace=<namespace>
+  kubectl get secrets -n <namespace> | grep <release_name>
+  ```
+
+* Создание или обновление **release**:
+
+  ```bash
+  helm upgrade --install <release_name> <chart_name> --namespace=<namespace>
+  ```
+
+* Добавить репозиторий, вывести список репозиториев:
+
+  ```bash
+  helm repo add stable https://kubernetes-charts.storage.googleapis.com
+  helm repo list
+  ```
+
+## Chartmuseum
+
+* Работу с `chartmuseum` можно посмотреть в `misc/scripts/check_chartmuseum.sh`
+
+## Helm secrets
+
+* Зашифровать файл:
+
+  ```bash
+  gpg --full-generate-key
+  gpg -k
+  sops -e -i --pgp HASH secrets.yaml
+  ```
+
+* Расшифровать файл:
+
+  ```bash
+  sops -d secrets.yaml
+  # or
+  helm secrets view secrets.yaml
   ```

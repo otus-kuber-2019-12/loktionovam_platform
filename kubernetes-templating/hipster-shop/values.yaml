@@ -1,0 +1,9 @@
+---
+
+redis:
+  fullnameOverride: redis-cart
+  nameOverride: redis-cart
+  # not production ready
+  usePassword: false
+  cluster:
+    enabled: false

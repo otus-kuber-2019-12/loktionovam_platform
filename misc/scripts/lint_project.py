@@ -13,8 +13,21 @@ PROJECT_DIR = realpath(join(dirname(realpath(__file__)), pardir, pardir))
 LINT_CONFIG = {
     'shellcheck': ['*.sh', 'generic-functions'],
     'yamllint': ['*.yml', '*.yaml'],
-    'pylint3': ['*.py']
+    'pylint3': ['*.py'],
+    'tflint': ['*.tf']
 }
+
+EXCLUDE_LIST = [
+    '*/.*',
+]
+
+def is_in_exclude_list(path, exclude_list):
+    """Check if path in exclude list
+    """
+    for pattern in exclude_list:
+        if fnmatch(path, pattern):
+            return True
+    return False
 
 def lint_file(file, lint_config):
     """Linting file with configured linters.
@@ -38,7 +51,7 @@ def main():
     """
     project_error = False
     for root, _, files in walk(PROJECT_DIR):
-        if not fnmatch(root, '*/.*'):
+        if not is_in_exclude_list(root, EXCLUDE_LIST):
             for file in files:
                 if not lint_file(join(root, file), LINT_CONFIG):
                     project_error = True

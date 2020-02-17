@@ -11,7 +11,88 @@
     kind_version: 0.6.1
     kubespy_version: 0.5.0
     linters: ["shellcheck", "yamllint", "pylint3"]
+    terraform_version: 0.12.20
+    tflint_version: 0.14.0
+    helm_version: 3.0.3
+    helmfile_version: 0.98.2
+    kubecfg_version: 0.15.1
+    qbec_version: 0.10.5
+    jsonnet_version: 0.15.0
   tasks:
+
+    # yamllint disable rule:line-length
+    - name: Install jsonnet {{ jsonnet_version }}
+      unarchive:
+        src: https://github.com/google/jsonnet/releases/download/v{{ jsonnet_version }}/jsonnet-bin-v{{ jsonnet_version }}-linux.tar.gz
+        dest: /usr/local/bin
+        mode: 0755
+        remote_src: true
+      become: true
+
+    - name: Install qbec {{ qbec_version }}
+      unarchive:
+        src: https://github.com/splunk/qbec/releases/download/v{{ qbec_version }}/qbec-linux-amd64.tar.gz
+        dest: /usr/local/bin
+        mode: 0755
+        remote_src: true
+      become: true
+
+    # yamllint disable rule:line-length
+    - name: Install kubecfg {{ kubecfg_version }}
+      get_url:
+        url: https://github.com/bitnami/kubecfg/releases/download/v{{ kubecfg_version }}/kubecfg-linux-amd64
+        dest: /usr/local/bin/kubecfg
+        mode: 0755
+      become: true
+
+    # yamllint disable rule:line-length
+    - name: Install helmfile {{ helmfile_version }}
+      get_url:
+        url: https://github.com/roboll/helmfile/releases/download/v0.98.2/helmfile_linux_amd64
+        dest: /usr/local/bin/helmfile
+        mode: 0755
+      become: true
+
+    - name: Install helm {{ helm_version }}
+      unarchive:
+        src: https://get.helm.sh/helm-v{{ helm_version }}-linux-amd64.tar.gz
+        dest: /usr/local/bin
+        mode: 0755
+        remote_src: true
+        extra_opts:
+          - --strip-components=1
+      become: true
+
+    - name: Get helm plugins statuses
+      command: helm plugin list
+      register: bootstrap_helm_plugins
+
+    - name: Install helm diff plugin
+      command: helm plugin install https://github.com/databus23/helm-diff --version v3.0.0-rc.7
+      when: 'not "Preview helm upgrade changes as a diff" in bootstrap_helm_plugins.stdout'
+
+    - name: Install helm secrets plugin
+      command: helm plugin install https://github.com/futuresimple/helm-secrets --version 2.0.2
+      become: true
+      when: 'not "This plugin provides secrets values encryption for Helm charts secure storing" in bootstrap_helm_plugins.stdout'
+
+    # yamllint disable rule:line-length
+    - name: Install tflint {{ tflint_version }}
+      unarchive:
+        src: https://github.com/terraform-linters/tflint/releases/download/v{{ tflint_version }}/tflint_linux_amd64.zip
+        dest: /usr/local/bin
+        mode: 0755
+        remote_src: true
+      become: true
+
+    # yamllint disable rule:line-length
+    - name: Install terraform {{ terraform_version }}
+      unarchive:
+        src: https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip
+        dest: /usr/local/bin
+        mode: 0755
+        remote_src: true
+      become: true
 
     - name: Install linter packages
       package:
