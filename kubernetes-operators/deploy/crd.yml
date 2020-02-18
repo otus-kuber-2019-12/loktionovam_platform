@@ -19,6 +19,7 @@ spec:
   validation:
     openAPIV3Schema:
       type: object
+      required: ["spec"]
       properties:
         apiVersion:
           type: string
@@ -31,6 +32,7 @@ spec:
               type: string
         spec:
           type: object
+          required: ["image", "database", "password", "storage_size"]
           properties:
             image:
               type: string
