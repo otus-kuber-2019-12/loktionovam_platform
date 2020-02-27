@@ -10,9 +10,22 @@
 
 * Основное задание: создать и применить CR, CRD для mysql с валидацией схемы
 * Основное задание: добавить в CRD обязательные поля
+* Основное занятие: mysql контроллер, управляющий persistent volume, persistent volume claim, deployment, service
 
 ## EX-9.2 Как запустить проект
 
+```bash
+kubectl apply -f kubernetes-operators/deploy/crd.yml
+kopf run kubernetes-operators/build/mysql_operator.py
+kubectl apply -f kubernetes-operators/deploy/cr.yml
+misc/scripts/fill_mysql_instance.sh
+```
+
 ## EX-9.3 Как проверить проект
+
+```bash
+export MYSQLPOD=$(kubectl get pods -l app=mysql-instance -o jsonpath="{.items[*].metadata.name}")
+kubectl exec -it $MYSQLPOD -- mysql -potuspassword -e "select * from test;" otus-database
+```
 
 ## EX-9.4 Как начать пользоваться проектом
