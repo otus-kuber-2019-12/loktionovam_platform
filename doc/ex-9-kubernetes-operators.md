@@ -10,7 +10,8 @@
 
 * Основное задание: создать и применить CR, CRD для mysql с валидацией схемы
 * Основное задание: добавить в CRD обязательные поля
-* Основное занятие: mysql контроллер, управляющий persistent volume, persistent volume claim, deployment, service
+* Основное занятие: mysql оператор, управляющий persistent volume, persistent volume claim, deployment, service
+* Основное занятие: деплой mysql оператора
 
 ## EX-9.2 Как запустить проект
 
@@ -23,9 +24,34 @@ misc/scripts/fill_mysql_instance.sh
 
 ## EX-9.3 Как проверить проект
 
+* Удалить запущенный проект, а затем заново создать - данные должны будут сохраниться и восстановиться через backup/restore jobs
+
 ```bash
+# Удаляем запущенный mysql
+delete mysqls.otus.homework mysql-instance
+
+# Заново создаем
+kubectl apply -f kubernetes-operators/deploy/cr.yml
+
+# Проверяем, что данные на месте
 export MYSQLPOD=$(kubectl get pods -l app=mysql-instance -o jsonpath="{.items[*].metadata.name}")
 kubectl exec -it $MYSQLPOD -- mysql -potuspassword -e "select * from test;" otus-database
+mysql: [Warning] Using a password on the command line interface can be insecure.
++----+-------------+
+| id | name        |
++----+-------------+
+|  1 | some data   |
+|  2 | some data-2 |
++----+-------------+
+```
+
+* Проверить, что backup/restore jobs отработали без ошибок
+
+```bash
+kubectl get jobs
+NAME                         COMPLETIONS   DURATION   AGE
+backup-mysql-instance-job    1/1           1s         111s
+restore-mysql-instance-job   1/1           20s        75s
 ```
 
 ## EX-9.4 Как начать пользоваться проектом

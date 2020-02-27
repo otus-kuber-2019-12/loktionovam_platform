@@ -5,8 +5,8 @@ sudo: required
 
 before_install:
   # yamllint disable rule:line-length
-  - sudo apt-get install --yes shellcheck yamllint pylint3 unzip wget python3-pip
-  - sudo pip3 install kubernetes-operators/build/requirements.txt
+  - sudo apt-get install --yes shellcheck yamllint pylint3 unzip wget python3-pip python3.8 virtualenv
+  - sudo pip3 install -r kubernetes-operators/build/requirements.txt
   # yamllint disable rule:line-length
   - wget https://github.com/terraform-linters/tflint/releases/download/v0.14.0/tflint_linux_amd64.zip
   - sudo unzip ./tflint_linux_amd64.zip -d /usr/local/bin/

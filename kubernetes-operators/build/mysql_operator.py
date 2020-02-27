@@ -61,7 +61,8 @@ def delete_success_jobs(mysql_instance_name):
 
 
 @kopf.on.create('otus.homework', 'v1', 'mysqls')
-def mysql_on_create(body):
+def mysql_on_create(body, spec, **kwargs):
+    # pylint: disable=unused-argument,too-many-locals
     """Create mysql controller
     """
     name = body['metadata']['name']
@@ -146,7 +147,8 @@ def mysql_on_create(body):
 
 
 @kopf.on.delete('otus.homework', 'v1', 'mysqls')
-def delete_object_make_backup(body):
+def delete_object_make_backup(body, **kwargs):
+    # pylint: disable=unused-argument
     """Delete mysqls resources and create backup
     """
     name = body['metadata']['name']

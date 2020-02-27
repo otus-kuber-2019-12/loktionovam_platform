@@ -1,0 +1,27 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: mysql-operator
+  template:
+    metadata:
+      labels:
+        name: mysql-operator
+    spec:
+      serviceAccountName: mysql-operator
+      containers:
+        - name: operator
+          image: "loktionovam/mysql-operator:v0.1"
+          imagePullPolicy: "Always"
+          resources:
+            requests:
+              cpu: 200m
+              memory: 64Mi
+            limits:
+              cpu: 300m
+              memory: 128Mi
