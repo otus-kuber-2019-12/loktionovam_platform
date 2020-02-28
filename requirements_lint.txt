@@ -1,0 +1,2 @@
+-r kubernetes-operators/build/requirements.txt
+pylint

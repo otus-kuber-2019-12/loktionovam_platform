@@ -5,10 +5,13 @@ sudo: required
 
 before_install:
   # yamllint disable rule:line-length
-  - sudo apt-get install --yes shellcheck yamllint pylint3 unzip wget python3-pip python3.8 virtualenv
-  - sudo pip3 install -r kubernetes-operators/build/requirements.txt
+  - sudo apt-get install --yes shellcheck yamllint unzip wget python3.8 virtualenv
+  - virtualenv -p python3.8 .venv
+  - source .venv/bin/activate
+  - pip3 install -r requirements_lint.txt
   # yamllint disable rule:line-length
   - wget https://github.com/terraform-linters/tflint/releases/download/v0.14.0/tflint_linux_amd64.zip
   - sudo unzip ./tflint_linux_amd64.zip -d /usr/local/bin/
   - misc/scripts/lint_project.py
+  - deactivate
   - curl https://raw.githubusercontent.com/express42/otus-platform-tests/2019-12/run.sh | bash  # yamllint disable-line rule:line-length
