@@ -6,6 +6,7 @@ import yaml
 import kopf
 import kubernetes
 from jinja2 import Environment, FileSystemLoader
+import logging
 
 
 def wait_until_job_end(jobname):
@@ -48,13 +49,16 @@ def delete_success_jobs(mysql_instance_name):
     :param mysql_instance_name: name of mysql instance related to that job
     :type: str
     """
-    print("start deletion")
+    logging.info("start deletion")
     api = kubernetes.client.BatchV1Api()
     jobs = api.list_namespaced_job('default')
     for job in jobs.items:
         jobname = job.metadata.name
-        if jobname in (f"backup-{mysql_instance_name}-job", f"restore-{mysql_instance_name}-job"):
+        if jobname in (f"backup-{mysql_instance_name}-job",
+                       f"restore-{mysql_instance_name}-job",
+                       f"passwd-{mysql_instance_name}-job"):
             if job.status.succeeded == 1:
+                logging.info("Find '%s' job, try to delete it", jobname)
                 api.delete_namespaced_job(jobname,
                                           'default',
                                           propagation_policy='Background')
@@ -120,7 +124,6 @@ def mysql_on_create(body, spec, **kwargs):
     api.create_namespaced_persistent_volume_claim(
         'default', persistent_volume_claim)
     api.create_namespaced_service('default', service)
-
     api = kubernetes.client.AppsV1Api()
     api.create_namespaced_deployment('default', deployment)
 
@@ -144,6 +147,40 @@ def mysql_on_create(body, spec, **kwargs):
         api.create_namespaced_persistent_volume_claim('default', backup_pvc)
     except kubernetes.client.rest.ApiException:
         pass
+
+
+@kopf.on.update('otus.homework', 'v1', 'mysqls')
+def update_object_password(body, meta, **kwargs):
+    # pylint: disable=unused-argument
+    """Update mysqls resources and change password
+    """
+    name = body['metadata']['name']
+    image = body['spec']['image']
+    new_password = body['spec']['password']
+    database = body['spec']['database']
+
+    delete_success_jobs(name)
+
+    last_handled_configuration = yaml.load(
+        meta.get('annotations')['kopf.zalando.org/last-handled-configuration'])
+    old_password = last_handled_configuration['spec']['password']
+
+    logging.info("Log password to study purposes only!!!")
+    logging.info("Old password: '%s'", old_password)
+    logging.info("New password: '%s'", new_password)
+    logging.info(database)
+    api = kubernetes.client.BatchV1Api()
+    passwd_job = render_template('passwd-job.yml.j2', {
+        'name': name,
+        'image': image,
+        'old_password': old_password,
+        'new_password': new_password,
+        'database': database})
+
+    logging.info(passwd_job)
+    api.create_namespaced_job('default', passwd_job)
+    wait_until_job_end(f"passwd-{name}-job")
+    return {'message': "mysql password changed"}
 
 
 @kopf.on.delete('otus.homework', 'v1', 'mysqls')

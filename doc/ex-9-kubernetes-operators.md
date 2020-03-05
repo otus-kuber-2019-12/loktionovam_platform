@@ -12,6 +12,7 @@
 * Основное задание: добавить в CRD обязательные поля
 * Основное занятие: mysql оператор, управляющий persistent volume, persistent volume claim, deployment, service
 * Основное занятие: деплой mysql оператора
+* Задание со(*): смена пароля от mysql, при изменении этого параметра в описании mysql-instance
 
 ## EX-9.2 Как запустить проект
 
@@ -26,32 +27,68 @@ misc/scripts/fill_mysql_instance.sh
 
 * Удалить запущенный проект, а затем заново создать - данные должны будут сохраниться и восстановиться через backup/restore jobs
 
-```bash
-# Удаляем запущенный mysql
-delete mysqls.otus.homework mysql-instance
+  ```bash
+  # Удаляем запущенный mysql
+  delete mysqls.otus.homework mysql-instance
 
-# Заново создаем
-kubectl apply -f kubernetes-operators/deploy/cr.yml
+  # Заново создаем
+  kubectl apply -f kubernetes-operators/deploy/cr.yml
 
-# Проверяем, что данные на месте
-export MYSQLPOD=$(kubectl get pods -l app=mysql-instance -o jsonpath="{.items[*].metadata.name}")
-kubectl exec -it $MYSQLPOD -- mysql -potuspassword -e "select * from test;" otus-database
-mysql: [Warning] Using a password on the command line interface can be insecure.
-+----+-------------+
-| id | name        |
-+----+-------------+
-|  1 | some data   |
-|  2 | some data-2 |
-+----+-------------+
-```
+  # Проверяем, что данные на месте
+  export MYSQLPOD=$(kubectl get pods -l app=mysql-instance -o jsonpath="{.items[*].metadata.name}")
+  kubectl exec -it $MYSQLPOD -- mysql -potuspassword -e "select * from test;" otus-database
+  mysql: [Warning] Using a password on the command line interface can be insecure.
+  +----+-------------+
+  | id | name        |
+  +----+-------------+
+  |  1 | some data   |
+  |  2 | some data-2 |
+  +----+-------------+
+  ```
 
 * Проверить, что backup/restore jobs отработали без ошибок
 
-```bash
-kubectl get jobs
-NAME                         COMPLETIONS   DURATION   AGE
-backup-mysql-instance-job    1/1           1s         111s
-restore-mysql-instance-job   1/1           20s        75s
-```
+  ```bash
+  kubectl get jobs
+  NAME                         COMPLETIONS   DURATION   AGE
+  backup-mysql-instance-job    1/1           1s         111s
+  restore-mysql-instance-job   1/1           20s        75s
+  ```
+
+* (*) Автоматическая смена пароля реализуется в `@kopf.on.update`, аналогично `@kopf.on.delete`, причем старый пароль мы можем узнать из аннотации `kopf.zalando.org/last-handled-configuration`:
+
+  ```bash
+  # Меняем пароль с 'otuspassword' на 'newpassword'
+  kubectl apply -f kubernetes-operators/deploy/cr-passwd.yml
+  ```
+
+  ```bash
+  # В логах видим, что событие обработано
+  [2020-03-05 23:13:57,381] root                 [INFO    ] Old password: 'otuspassword'
+  [2020-03-05 23:13:57,381] root                 [INFO    ] New password: 'newpassword'
+  [2020-03-05 23:13:57,381] root                 [INFO    ] otus-database
+  [2020-03-05 23:13:57,388] root                 [INFO    ] {'apiVersion': 'batch/v1', 'kind': 'Job', 'metadata': {'namespace': 'default', 'name': 'passwd-mysql-instance-job'}, 'spec': {'template': {'metadata': {'name': 'passwd-mysql-instance-job'}, 'spec': {'restartPolicy': 'OnFailure', 'containers': [{'name': 'passwd-mysql-instance', 'image': 'mysql:5.7', 'imagePullPolicy': 'IfNotPresent', 'command': ['/bin/sh', '-c', 'mysql -u root -h mysql-instance -potuspassword -e "UPDATE mysql.user SET authentication_string=PASSWORD(\'newpassword\') WHERE User=\'root\'; FLUSH PRIVILEGES;";']}]}}}}
+  job with passwd-mysql-instance-job  found,wait untill end
+  job with passwd-mysql-instance-job  found,wait untill end
+  job with passwd-mysql-instance-job  success
+  [2020-03-05 23:13:59,445] kopf.objects         [INFO    ] [default/mysql-instance] Handler 'update_object_password' succeeded.
+  [2020-03-05 23:13:59,445] kopf.objects         [INFO    ] [default/mysql-instance] All handlers succeeded for update.
+  ```
+
+  ```bash
+  # Подключаемся с новым паролем
+  kubectl exec -ti mysql-instance-6c76bcf945-vngx8 -- mysql -u root -pnewpassword -e 'show databases;'
+  mysql: [Warning] Using a password on the command line interface can be insecure.
+  +--------------------+
+  | Database           |
+  +--------------------+
+  | information_schema |
+  | mysql              |
+  | otus-database      |
+  | performance_schema |
+  | sys                |
+  +--------------------+
+
+  ```
 
 ## EX-9.4 Как начать пользоваться проектом

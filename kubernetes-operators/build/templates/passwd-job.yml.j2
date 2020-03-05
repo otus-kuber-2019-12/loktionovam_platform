@@ -1,0 +1,20 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: default
+  name: passwd-{{ name }}-job
+spec:
+  template:
+    metadata:
+      name: passwd-{{ name }}-job
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: passwd-{{ name }}
+        image: mysql:5.7
+        imagePullPolicy: IfNotPresent
+        command:
+        - /bin/sh
+        - -c
+        - mysql -u root -h {{ name }} -p{{ old_password }} -e "UPDATE mysql.user SET authentication_string=PASSWORD('{{ new_password }}') WHERE User='root'; FLUSH PRIVILEGES;";

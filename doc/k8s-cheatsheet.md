@@ -7,6 +7,7 @@
   * [Helm](#helm)
   * [Chartmuseum](#chartmuseum)
   * [Helm secrets](#helm-secrets)
+  * [k8s API](#k8s-api)
 
 ## minikube
 
@@ -123,3 +124,12 @@ kind create cluster --config bootstrap/k8s/kind-config.yaml
   # or
   helm secrets view secrets.yaml
   ```
+
+## k8s API
+
+```bash
+export CLUSTER_NAME="minikube"
+APISERVER=$(kubectl config view -o jsonpath="{.clusters[?(@.name==\"$CLUSTER_NAME\")].cluster.server}")
+TOKEN=$(kubectl get secrets -o jsonpath="{.items[?(@.metadata.annotations['kubernetes\.io/service-account\.name']=='default')].data.token}"|base64 --decode)
+curl -X GET $APISERVER/api --header "Authorization: Bearer $TOKEN" --insecure
+```
