@@ -32,4 +32,4 @@ loktionovam Platform repository
 | [**EX-5: kubernetes-networks**](doc/ex-5-kubernetes-networks.md)<br/>Сетевое взаимодействие Pod, сервисы                                                              |
 | [**EX-6: kubernetes-volumes**](doc/ex-6-kubernetes-volumes.md)<br/>Volumes, Storages, StatefulSet                                                                     |
 | [**EX-8: kubernetes-templating**](doc/ex-8-kubernetes-templating.md)<br/>Шаблонизация манифестов в Kubernetes                                                         |
-| [**EX-8: kubernetes-operators**](doc/ex-8-kubernetes-operators.md)<br/>Custom Resource Definition. Operators                                                          |
+| [**EX-9: kubernetes-operators**](doc/ex-9-kubernetes-operators.md)<br/>Custom Resource Definition. Operators                                                          |

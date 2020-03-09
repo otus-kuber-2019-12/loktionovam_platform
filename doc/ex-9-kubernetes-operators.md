@@ -12,7 +12,20 @@
 * Основное задание: добавить в CRD обязательные поля
 * Основное занятие: mysql оператор, управляющий persistent volume, persistent volume claim, deployment, service
 * Основное занятие: деплой mysql оператора
+* Задание со(*): обновление `subresource status` через оператор
 * Задание со(*): смена пароля от mysql, при изменении этого параметра в описании mysql-instance
+
+Вопрос: почему объект создался, хотя мы создали CR, до того, как запустили контроллер?
+
+Ответ: объект создался потому что, каждый раз, когда запускается kopf based оператор он проверяет состоянием обслуживаемых их ресурсов и если состояние изменилось с момента, когда оно было последний раз обработано, то запускается новый цикл обработки, таким образом реализуется `level triggering`.
+
+```plain
+If the operator is down and not running, any changes to the objects are ignored and not handled. They will be handled when the operator starts: every time a Kopf-based operator starts, it lists all objects of the served resource kind, and checks for their state; if the state has changed since the object was last handled (no matter how long time ago), a new handling cycle starts.
+
+Only the last state is taken into account. All the intermediate changes are accumulated and handled together. This corresponds to the Kubernetes’s concept of eventual consistency and level triggering (as opposed to edge triggering).
+```
+
+Взято отсюда: <https://kopf.readthedocs.io/en/latest/continuity/#downtime>
 
 ## EX-9.2 Как запустить проект
 
@@ -53,6 +66,81 @@ misc/scripts/fill_mysql_instance.sh
   NAME                         COMPLETIONS   DURATION   AGE
   backup-mysql-instance-job    1/1           1s         111s
   restore-mysql-instance-job   1/1           20s        75s
+  ```
+
+* (*) Запись в `status subresources` реализуется включением `/apis/otus.homework/v1/namespaces/default/mysqls/mysql-instance/status` эндпоинта в crd:
+
+  ```yaml
+    subresources:
+    status: {}
+  ```
+
+  и обновлением статуса ресурса через вызов `patch_namespaced_custom_object_status`:
+
+  ```python
+    ...
+    ...
+        status = {
+            "status": {
+                'kopf': {
+                    'message': 'mysql-instance created WITH restore-job'}}}
+    ...
+    ...
+      api = kubernetes.client.CustomObjectsApi()
+    try:
+        crd_status = api.patch_namespaced_custom_object_status(group, version, namespace, plural, name, body=status)
+        logging.info(crd_status)
+    except kubernetes.client.rest.ApiException as e:
+        print("Exception when calling CustomObjectsApi->get_namespaced_custom_object: %s\n" % e)
+  ```
+
+  Чтобы проверить, что `status subresource` обновился нужно обратиться к `/apis/otus.homework/v1/namespaces/default/mysqls/mysql-instance/status` эндпоинту:
+
+  ```bash
+  kubectl proxy --port=8080
+  curl http://localhost:8080/apis/otus.homework/v1/namespaces/default/mysqls/mysql-instance/status 2>/dev/null | jq .status
+  {
+    "kopf": {
+      "message": "mysql-instance created WITHOUT restore-job"
+    }
+  }
+  ```
+
+  Либо можно проверить вывод `kubectl describe`:
+
+  ```bash
+  kubectl describe mysqls.otus.homework mysql-instance
+  Name:         mysql-instance
+  Namespace:    default
+  Labels:       <none>
+  Annotations:  kopf.zalando.org/last-handled-configuration:
+                  {"spec": {"database": "otus-database", "image": "mysql:5.7", "password": "otuspassword", "storage_size": "1Gi"}}
+                kubectl.kubernetes.io/last-applied-configuration:
+                  {"apiVersion":"otus.homework/v1","kind":"MySQL","metadata":{"annotations":{},"name":"mysql-instance","namespace":"default"},"spec":{"datab...
+  API Version:  otus.homework/v1
+  Kind:         MySQL
+  Metadata:
+    Creation Timestamp:  2020-03-09T15:57:40Z
+    Finalizers:
+      kopf.zalando.org/KopfFinalizerMarker
+    Generation:        1
+    Resource Version:  174341
+    Self Link:         /apis/otus.homework/v1/namespaces/default/mysqls/mysql-instance
+    UID:               0a69a0e9-b820-4f20-8fe8-585fa638b624
+  Spec:
+    Database:      otus-database
+    Image:         mysql:5.7
+    Password:      otuspassword
+    storage_size:  1Gi
+  Status:
+    Kopf:
+      Message:  mysql-instance created WITHOUT restore-job
+  Events:
+    Type    Reason   Age   From  Message
+    ----    ------   ----  ----  -------
+    Normal  Logging  16m   kopf  All handlers succeeded for creation.
+    Normal  Logging  16m   kopf  Handler 'mysql_on_create' succeeded.
+
   ```
 
 * (*) Автоматическая смена пароля реализуется в `@kopf.on.update`, аналогично `@kopf.on.delete`, причем старый пароль мы можем узнать из аннотации `kopf.zalando.org/last-handled-configuration`:

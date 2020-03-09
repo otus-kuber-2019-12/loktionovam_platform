@@ -16,6 +16,8 @@ spec:
     singular: mysql
     shortNames:
       - ms
+  subresources:
+    status: {}
   validation:
     openAPIV3Schema:
       type: object
@@ -41,4 +43,9 @@ spec:
             password:
               type: string
             storage_size:
+              type: string
+        status:
+          type: object
+          properties:
+            message:
               type: string
