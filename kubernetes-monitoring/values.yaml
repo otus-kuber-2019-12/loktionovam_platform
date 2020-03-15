@@ -1,0 +1,13 @@
+---
+
+prometheus:
+  additionalServiceMonitors:
+    - name: nginx
+      selector:
+        matchLabels:
+          app: nginx
+      namespaceSelector:
+        any: true
+      endpoints:
+        - path: /metrics
+          port: "metrics"

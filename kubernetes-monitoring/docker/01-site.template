@@ -1,0 +1,15 @@
+server {
+    # used envsubst as templating tool
+    # works bad if we used $server and other nginx variables
+    listen       ${NGINX_PORT};
+    server_name  ${NGINX_HOST};
+    location / {
+        root   /app;
+        index  index.html index.htm;
+    }
+
+    location = /basic_status {
+        stub_status;
+    }
+
+}
