@@ -13,7 +13,7 @@ PROJECT_DIR = realpath(join(dirname(realpath(__file__)), pardir, pardir))
 LINT_CONFIG = {
     'shellcheck': ['*.sh', 'generic-functions'],
     'yamllint': ['*.yml', '*.yaml'],
-    'pylint3': ['*.py'],
+    'pylint': ['*.py'],
     'tflint': ['*.tf']
 }
 

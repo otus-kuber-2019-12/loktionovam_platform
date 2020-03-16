@@ -1,0 +1,44 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: server
+          image: loktionovam/web:1.17.1-alpine-2
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+          readinessProbe:
+            httpGet:
+              path: /basic_status
+              port: 8000
+          livenessProbe:
+            tcpSocket:
+              port: 8000
+        - name: monitoring
+          image: nginx/nginx-prometheus-exporter:0.6.0
+          args: ["-nginx.scrape-uri", "http://127.0.0.1:8000/basic_status"]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi

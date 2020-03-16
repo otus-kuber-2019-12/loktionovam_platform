@@ -14,6 +14,10 @@ kubernetes-volumes: [![Build Status](https://travis-ci.com/otus-kuber-2019-12/lo
 
 kubernetes-templating: [![Build Status](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform.svg?branch=kubernetes-templating)](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform)
 
+kubernetes-operators: [![Build Status](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform.svg?branch=kubernetes-operators)](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform)
+
+kubernetes-monitoring: [![Build Status](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform.svg?branch=kubernetes-monitoring)](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform)
+
 loktionovam Platform repository
 
 ## Настройка репозитория
@@ -30,3 +34,5 @@ loktionovam Platform repository
 | [**EX-5: kubernetes-networks**](doc/ex-5-kubernetes-networks.md)<br/>Сетевое взаимодействие Pod, сервисы                                                              |
 | [**EX-6: kubernetes-volumes**](doc/ex-6-kubernetes-volumes.md)<br/>Volumes, Storages, StatefulSet                                                                     |
 | [**EX-8: kubernetes-templating**](doc/ex-8-kubernetes-templating.md)<br/>Шаблонизация манифестов в Kubernetes                                                         |
+| [**EX-9: kubernetes-operators**](doc/ex-9-kubernetes-operators.md)<br/>Custom Resource Definition. Operators                                                          |
+| [**EX-10: kubernetes-monitoring**](doc/ex-10-kubernetes-operators.md)<br/>Мониторинг сервиса в кластере k8s                                                           |
