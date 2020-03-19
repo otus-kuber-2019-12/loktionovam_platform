@@ -9,8 +9,10 @@ resource "google_container_cluster" "primary" {
   location           = var.location
   min_master_version = var.min_master_version
   subnetwork         = var.subnetwork
+  logging_service    = var.logging_service
+  monitoring_service    = var.monitoring_service
   node_pool {
-    name       = "defaultpool"
+    name       = "default-pool"
     node_count = var.defaultpool_nodes_count
 
     node_config {
@@ -18,6 +20,16 @@ resource "google_container_cluster" "primary" {
       disk_size_gb = var.defaultpool_machine_size
     }
   }
+  node_pool {
+    name       = "infra-pool"
+    node_count = var.infrapool_nodes_count
+
+    node_config {
+      machine_type = var.infrapool_machine_type
+      disk_size_gb = var.infrapool_machine_size
+    }
+  }
+
 }
 
 resource "google_compute_firewall" "firewall_kubernetes" {

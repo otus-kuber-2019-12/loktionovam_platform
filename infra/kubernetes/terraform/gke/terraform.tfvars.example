@@ -1,6 +1,7 @@
 project = "example-project
 
 defaultpool_nodes_count = 1
+infrapool_nodes_count = 3
 
 cluster_name = "example-cluster"
 
