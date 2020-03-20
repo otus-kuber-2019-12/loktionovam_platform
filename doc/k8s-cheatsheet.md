@@ -8,6 +8,7 @@
   * [Chartmuseum](#chartmuseum)
   * [Helm secrets](#helm-secrets)
   * [k8s API](#k8s-api)
+  * [GKE](#gke)
 
 ## minikube
 
@@ -133,3 +134,11 @@ APISERVER=$(kubectl config view -o jsonpath="{.clusters[?(@.name==\"$CLUSTER_NAM
 TOKEN=$(kubectl get secrets -o jsonpath="{.items[?(@.metadata.annotations['kubernetes\.io/service-account\.name']=='default')].data.token}"|base64 --decode)
 curl -X GET $APISERVER/api --header "Authorization: Bearer $TOKEN" --insecure
 ```
+
+## GKE
+
+* Настроить kubectl на использование primary кластера
+
+  ```bash
+  gcloud beta container clusters get-credentials primary --zone europe-west1-b
+  ```

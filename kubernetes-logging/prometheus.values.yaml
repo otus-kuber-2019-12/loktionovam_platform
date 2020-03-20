@@ -1,0 +1,39 @@
+---
+
+prometheus:
+  additionalServiceMonitors:
+    - name: infra
+      selector:
+        matchExpressions:
+          - {key: app, operator: In, values: [elasticsearch-exporter]}
+      namespaceSelector:
+        any: true
+      endpoints:
+        - path: /metrics
+          port: metrics
+        - path: /metrics
+          port: http
+
+grafana:
+  ingress:
+    enabled: true
+    hosts:
+      - grafana.34.77.166.162.xip.io
+    annotations: {
+      kubernetes.io/ingress.class: nginx
+    }
+    path: /
+
+additionalPrometheusRulesMap:
+  elasticsearch-alertmanager.rules:
+    groups:
+      - name: elasticsearch
+        rules:
+          - alert: ElasticsearchTooFewNodesRunning
+            expr: elasticsearch_cluster_health_number_of_nodes < 3
+            for: 5m
+            labels:
+              severity: critical
+            annotations:
+              message: There are only {{$value}} < 3 ElasticSearch nodes running
+              summary: ElasticSearch running on less than 3 nodes
