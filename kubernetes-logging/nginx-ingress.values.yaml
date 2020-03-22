@@ -16,3 +16,9 @@ controller:
 
   nodeSelector:
     cloud.google.com/gke-nodepool: infra-pool
+
+  metrics:
+    enabled: true
+    service:
+      annotations:
+        prometheus.io/scrape: "true"
