@@ -11,7 +11,13 @@ rawConfig: |
   @INCLUDE fluent-bit-output.conf
 
   [FILTER]
-    Name    Modify
+    Name    modify
     Match   *
     Remove  time
     Remove  @timestamp
+
+
+tolerations:
+  - key: node-role
+    operator: Exists
+    effect: NoSchedule
