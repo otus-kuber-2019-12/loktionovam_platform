@@ -14,6 +14,7 @@
 Основное задание: установлен EFK для сбора и визуализации логов
 Основное задание: установлен prometheus operator (promethues, grafana, alertmanager) для мониторинга elasticsearch
 Основное задание: установлен elasticsearch exporter, настроен алерт `ElasticsearchTooFewNodesRunning`, в grafana добавлен дашборд для визуализации метрик elasticsearch
+Основное задание: сбор и визуализация логов nginx (nginx-total, nginx-2xx, nginx-3xx, nginx-4xx, nginx-5xx), дашборд для логов nginx
 
 ## EX-11.2 Как запустить проект
 
@@ -44,8 +45,9 @@
 * Установить helm charts
 
   ```yaml
+  cd kubernetes-logging/
   helm upgrade --install elasticsearch elastic/elasticsearch --wait --namespace observability -f elasticsearch.values.yaml
-  helm upgrade --install nginx-ingress stable/nginx-ingress --wait --namespace=nginx-ingress --version=1.11.1 -f kubernetes-logging/nginx-ingress.values.yaml
+  helm upgrade --install nginx-ingress stable/nginx-ingress --wait --namespace=nginx-ingress -f nginx-ingress.values.yaml
   helm upgrade --install kibana elastic/kibana --wait --namespace observability -f kibana.values.yaml
   helm upgrade --install fluent-bit stable/fluent-bit --wait --namespace observability -n observability -f fluent-bit.values.yaml
   helm upgrade --install prometheus-operator stable/prometheus-operator --namespace=observability --values=prometheus.values.yaml
