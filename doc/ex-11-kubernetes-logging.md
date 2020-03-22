@@ -14,7 +14,8 @@
 Основное задание: установлен EFK для сбора и визуализации логов
 Основное задание: установлен prometheus operator (promethues, grafana, alertmanager) для мониторинга elasticsearch
 Основное задание: установлен elasticsearch exporter, настроен алерт `ElasticsearchTooFewNodesRunning`, в grafana добавлен дашборд для визуализации метрик elasticsearch
-Основное задание: сбор и визуализация логов nginx (nginx-total, nginx-2xx, nginx-3xx, nginx-4xx, nginx-5xx), дашборд для логов nginx
+Основное задание: сбор и визуализация логов nginx (nginx-total, nginx-2xx, nginx-3xx, nginx-4xx, nginx-5xx), дашборд для логов nginx в kibana
+Основное задание: сбор и визуализация логов nginx с помощью loki, визуализации логов в grafana
 
 ## EX-11.2 Как запустить проект
 
@@ -54,7 +55,17 @@
   helm upgrade --install elasticsearch-exporter stable/elasticsearch-exporter --wait --namespace=observability --values=elasticsearch-exporter.values.yaml
 
   kubectl get secrets -n observability prometheus-operator-grafana  -o jsonpath="{.data.admin-password}" | base64 -d
+
+  helm repo add loki https://grafana.github.io/loki/charts
+  helm repo update
+  helm upgrade --install loki loki/loki-stack --wait --namespace=observability --values=loki.values.yaml
   ```
+
+Есть проблема [Add datasource by configuration to Grafana does not work](https://github.com/coreos/prometheus-operator/issues/1909) из-за чего `datasource` не обновляются sidecar контейнером grafana-sc-datasources. Простейшее решение - удалить pod grafana, тогда после его автоматического пересоздания, sidecar контейнер отработает и loki добавится в список datasource:
+
+```bash
+kubectl delete pods prometheus-operator-grafana-7454c9d578-prqzk
+```
 
 ## EX-11.3 Как проверить проект
 

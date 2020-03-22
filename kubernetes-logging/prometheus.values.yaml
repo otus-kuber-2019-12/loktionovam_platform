@@ -23,7 +23,11 @@ grafana:
       kubernetes.io/ingress.class: nginx
     }
     path: /
-
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      access: proxy
+      url: http://loki:3100
 additionalPrometheusRulesMap:
   elasticsearch-alertmanager.rules:
     groups:
