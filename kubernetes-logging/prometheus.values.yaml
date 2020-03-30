@@ -5,7 +5,9 @@ prometheus:
     - name: infra
       selector:
         matchExpressions:
-          - {key: app, operator: In, values: [elasticsearch-exporter, nginx-ingress]}
+          - key: app
+            operator: In
+            values: [elasticsearch-exporter, nginx-ingress]
       namespaceSelector:
         any: true
       endpoints:

@@ -33,6 +33,12 @@ kind create cluster --config bootstrap/k8s/kind-config.yaml
   kubectl cluster-info
   ```
 
+* Изменить namespace на observability
+
+  ```bash
+  kubectl config set-context --current --namespace=observability
+  ```
+
 * Изменения в кластере
 
   ```bash
@@ -102,6 +108,12 @@ kind create cluster --config bootstrap/k8s/kind-config.yaml
   ```bash
   helm repo add stable https://kubernetes-charts.storage.googleapis.com
   helm repo list
+  ```
+
+* Информация о всех релизах:
+
+  ```bash
+  helm list --all --all-namespaces
   ```
 
 ## Chartmuseum
