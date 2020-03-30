@@ -21,3 +21,13 @@ tolerations:
   - key: node-role
     operator: Exists
     effect: NoSchedule
+
+
+# (*) collect logs from virtual machines
+input:
+  systemd:
+    enabled: true
+    stripUnderscores: true
+    # setup an empty filter here to collect all systemd logs
+    filters:
+      systemdUnit: []

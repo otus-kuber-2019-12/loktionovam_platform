@@ -10,12 +10,13 @@
 
 ## EX-11.1 Что было сделано
 
-Основное задание: развернут infra pool (3 nodes), default pool (1 node) в GKE, исправлена конфигурация terraform
-Основное задание: установлен EFK для сбора и визуализации логов
-Основное задание: установлен prometheus operator (promethues, grafana, alertmanager) для мониторинга elasticsearch
-Основное задание: установлен elasticsearch exporter, настроен алерт `ElasticsearchTooFewNodesRunning`, в grafana добавлен дашборд для визуализации метрик elasticsearch
-Основное задание: сбор и визуализация логов nginx (nginx-total, nginx-2xx, nginx-3xx, nginx-4xx, nginx-5xx), дашборд для логов nginx в kibana
-Основное задание: сбор и визуализация логов nginx с помощью loki, визуализации логов в grafana
+* [x] Основное задание: развернут infra pool (3 nodes), default pool (1 node) в GKE, исправлена конфигурация terraform
+* [x] Основное задание: установлен EFK для сбора и визуализации логов
+* [x] Основное задание: установлен prometheus operator (promethues, grafana, alertmanager) для мониторинга elasticsearch
+* [x] Основное задание: установлен elasticsearch exporter, настроен алерт `ElasticsearchTooFewNodesRunning`, в grafana добавлен дашборд для визуализации метрик elasticsearch
+* [x] Основное задание: сбор и визуализация логов nginx (nginx-total, nginx-2xx, nginx-3xx, nginx-4xx, nginx-5xx), дашборд для логов nginx в kibana
+* [x] Основное задание: сбор и визуализация логов nginx с помощью loki, визуализации логов в grafana
+* [x] Задание со (*): сбор логов виртуальных машин на которых запущен k8s через `systemd input plugin` и визуализация логов для `sshd`
 
 ## EX-11.2 Как запустить проект
 
@@ -68,5 +69,10 @@ kubectl delete pods prometheus-operator-grafana-7454c9d578-prqzk
 ```
 
 ## EX-11.3 Как проверить проект
+
+* В kibana <http://kibana.34.77.166.162.xip.io> есть дашборды для отображения запросов в nginx ingress и sshd
+  ![kibana-sshd-dashboard](img/ex-11-kubernetes-logging-kibana-sshd.png)
+* В grafana по адресу <http://grafana.34.77.166.162.xip.io> отображаются логи и метрики для nginx ingress controller
+  ![grafana-nginx-ingress-dashboard](img/ex-11-kubernetes-logging-grafana-nginx-ingress.png)
 
 ## EX-11.4 Как начать пользоваться проектом
