@@ -17,6 +17,7 @@
 * [x] Основное задание: сбор и визуализация логов nginx (nginx-total, nginx-2xx, nginx-3xx, nginx-4xx, nginx-5xx), дашборд для логов nginx в kibana
 * [x] Основное задание: сбор и визуализация логов nginx с помощью loki, визуализации логов в grafana
 * [x] Задание со (*): сбор логов виртуальных машин на которых запущен k8s через `systemd input plugin` и визуализация логов для `sshd`
+* [x] Задание со (*): развернуть self-hosted кластер и настроить сбор аудит логов
 
 ## EX-11.2 Как запустить проект
 
@@ -48,6 +49,10 @@
 
   ```yaml
   cd kubernetes-logging/
+  kubectl create ns observability
+  kubectl label nodes <nodes here> cloud.google.com/gke-nodepool=infra-pool
+  helm repo add elastic https://helm.elastic.co
+  helm repo update
   helm upgrade --install elasticsearch elastic/elasticsearch --wait --namespace observability -f elasticsearch.values.yaml
   helm upgrade --install nginx-ingress stable/nginx-ingress --wait --namespace=nginx-ingress -f nginx-ingress.values.yaml
   helm upgrade --install kibana elastic/kibana --wait --namespace observability -f kibana.values.yaml
@@ -67,6 +72,24 @@
 ```bash
 kubectl delete pods prometheus-operator-grafana-7454c9d578-prqzk
 ```
+
+* Для сбора логов аудита нужно выполнить бутстрап кластера:
+
+  ```bash
+  misc/scripts/create_rancher_cluster.sh
+  ```
+
+  применить конфигурацию `kubernetes-logging/audit/rancher/k8s-logging.yaml` для включения логов аудита, установить elasticsearch и fluent-bit:
+
+  ```bash
+  cd kubernetes-logging/audit
+  kubectl create ns observability
+  helm upgrade --install elasticsearch elastic/elasticsearch --wait --namespace observability -f elasticsearch.values.yaml
+  helm upgrade --install fluent-bit stable/fluent-bit --wait --namespace observability -n observability -f fluent-bit.values.yaml
+  helm upgrade --install kibana elastic/kibana --wait --namespace observability -f kibana.values.yaml
+  ```
+
+  и импортировать в kibana дашборд `kubernetes-logging/audit/export.ndjson`, который отображает количество `create` и `update` событий в кластере в минуту.
 
 ## EX-11.3 Как проверить проект
 
