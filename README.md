@@ -20,6 +20,8 @@ kubernetes-monitoring: [![Build Status](https://travis-ci.com/otus-kuber-2019-12
 
 kubernetes-logging: [![Build Status](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform.svg?branch=kubernetes-logging)](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform)
 
+kubernetes-vault: [![Build Status](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform.svg?branch=kubernetes-vault)](https://travis-ci.com/otus-kuber-2019-12/loktionovam_platform)
+
 loktionovam Platform repository
 
 ## Настройка репозитория
@@ -39,3 +41,4 @@ loktionovam Platform repository
 | [**EX-9: kubernetes-operators**](doc/ex-9-kubernetes-operators.md)<br/>Custom Resource Definition. Operators                                                          |
 | [**EX-10: kubernetes-monitoring**](doc/ex-10-kubernetes-monitoring.md)<br/>Мониторинг сервиса в кластере k8s                                                           |
 | [**EX-11: kubernetes-logging**](doc/ex-11-kubernetes-logging.md)<br/>Сервисы централизованного логирования для kubernetes                                           |
+| [**EX-13: kubernetes-vault**](doc/ex-13-kubernetes-vault.md)<br/>Hashicorp Vault +K8s                                                                                 |
