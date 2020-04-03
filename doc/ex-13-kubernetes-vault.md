@@ -187,6 +187,45 @@ path "otus/otus-rw/*" {
 }
 ```
 
+* Consul template
+
+```bash
+kubectl apply -f consul-template/configmap-example-vault-agent-config.yaml
+kubectl apply -f consul-template/example-k8s-spec.yml
+
+# sidecar контейнер с consul template получил токен
+kubectl exec -ti vault-agent-example -c consul-template -- cat /home/vault/.vault-token                                                                                                                                                                                   ─╯
+s.o6WhySWAf27zQwF8Ygc6YDUw
+
+# сходил в vault за секретами и отрендерил конфигурацию для nginx
+kubectl exec -ti vault-agent-example -c consul-template  -- cat /etc/secrets/index.html                                                                                                                                                                                   ─╯
+  <html>
+  <body>
+  <p>Some secrets:</p>
+  <ul>
+  <li><pre>username: otus</pre></li>
+  <li><pre>password: asajkjkahs</pre></li>
+  </ul>
+
+  </body>
+  </html>
+  %
+
+# nginx получил уже отрендеренный конфигурационный файл
+kubectl exec -ti vault-agent-example -c nginx-container  -- cat /usr/share/nginx/html/index.html                                                                                                                                                                          ─╯
+  <html>
+  <body>
+  <p>Some secrets:</p>
+  <ul>
+  <li><pre>username: otus</pre></li>
+  <li><pre>password: asajkjkahs</pre></li>
+  </ul>
+
+  </body>
+  </html>
+  %
+```
+
 ## EX-13.3 Как проверить проект
 
 ## EX-13.4 Как начать пользоваться проектом
