@@ -8,6 +8,7 @@
   * [Chartmuseum](#chartmuseum)
   * [Helm secrets](#helm-secrets)
   * [k8s API](#k8s-api)
+  * [GKE](#gke)
 
 ## minikube
 
@@ -30,6 +31,12 @@ kind create cluster --config bootstrap/k8s/kind-config.yaml
   ```bash
   kubectl config view
   kubectl cluster-info
+  ```
+
+* Изменить namespace на observability
+
+  ```bash
+  kubectl config set-context --current --namespace=observability
   ```
 
 * Изменения в кластере
@@ -103,6 +110,12 @@ kind create cluster --config bootstrap/k8s/kind-config.yaml
   helm repo list
   ```
 
+* Информация о всех релизах:
+
+  ```bash
+  helm list --all --all-namespaces
+  ```
+
 ## Chartmuseum
 
 * Работу с `chartmuseum` можно посмотреть в `misc/scripts/check_chartmuseum.sh`
@@ -133,3 +146,11 @@ APISERVER=$(kubectl config view -o jsonpath="{.clusters[?(@.name==\"$CLUSTER_NAM
 TOKEN=$(kubectl get secrets -o jsonpath="{.items[?(@.metadata.annotations['kubernetes\.io/service-account\.name']=='default')].data.token}"|base64 --decode)
 curl -X GET $APISERVER/api --header "Authorization: Bearer $TOKEN" --insecure
 ```
+
+## GKE
+
+* Настроить kubectl на использование primary кластера
+
+  ```bash
+  gcloud beta container clusters get-credentials primary --zone europe-west1-b
+  ```

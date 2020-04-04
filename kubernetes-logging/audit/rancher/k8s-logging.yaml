@@ -1,0 +1,87 @@
+---
+Version: v3
+clusters:
+  k8s-logging:
+    answers: {}
+    dockerRootDir: /var/lib/docker
+    enableNetworkPolicy: false
+    localClusterAuthEndpoint:
+      enabled: true
+    rancherKubernetesEngineConfig:
+      addonJobTimeout: 30
+      authentication:
+        strategy: x509|webhook
+      authorization: {}
+      bastionHost: {}
+      cloudProvider: {}
+      ignoreDockerVersion: true
+      ingress:
+        provider: nginx
+      kubernetesVersion: v1.17.4-rancher1-3
+      monitoring:
+        provider: metrics-server
+        replicas: 1
+      network:
+        canalNetworkProvider:
+          iface: eth1
+        options:
+          flannelBackendType: vxlan
+        plugin: canal
+      nodes:
+        - address: 172.22.101.111
+          hostnameOverride: node-01
+          internalAddress: 172.22.101.111
+          port: "22"
+          role:
+            - etcd
+            - controlplane
+            - worker
+          user: root
+        - address: 172.22.101.112
+          hostnameOverride: node-02
+          internalAddress: 172.22.101.112
+          port: "22"
+          role:
+            - worker
+          user: root
+        - address: 172.22.101.113
+          hostnameOverride: node-03
+          internalAddress: 172.22.101.113
+          port: "22"
+          role:
+            - worker
+          user: root
+      restore: {}
+      services:
+        etcd:
+          backupConfig:
+            enabled: true
+            intervalHours: 12
+            retention: 6
+          creation: 12h
+          extraArgs:
+            election-timeout: "5000"
+            heartbeat-interval: "500"
+          retention: 72h
+          snapshot: false
+        kubeApi:
+          audit_log:
+            enabled: true
+            configuration:
+              max_age: 6
+              max_backup: 6
+              max_size: 110
+              path: /var/log/kube-audit/audit-log.json
+              format: json
+          serviceNodePortRange: 30000-32767
+        kubeController: {}
+        kubelet: {}
+        kubeproxy: {}
+        scheduler: {}
+      upgradeStrategy:
+        maxUnavailableControlplane: "1"
+        maxUnavailableWorker: 10%
+        nodeDrainInput:
+          gracePeriod: -1
+          ignoreDaemonSets: true
+          timeout: 120

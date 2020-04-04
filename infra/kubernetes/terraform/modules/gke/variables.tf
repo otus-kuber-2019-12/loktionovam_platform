@@ -32,12 +32,37 @@ variable "defaultpool_nodes_count" {
   default     = 1
 }
 
+variable infrapool_machine_type {
+  description = "Machine type for infra pool"
+  default     = "n1-standard-2"
+}
+
+variable infrapool_machine_size {
+  description = "Machine boot disk size for infra pool"
+  default     = 20
+}
+
+variable "infrapool_nodes_count" {
+  description = "Cluster nodes count in the infra pool"
+  default     = 1
+}
+
 variable "min_master_version" {
   description = "The minimum version of the master"
-  default     = "1.15.8-gke.2"
+  default     = "1.15.9-gke.24"
 }
 
 variable "subnetwork" {
   description = "The name or self_link of the Google Compute Engine subnetwork in which the cluster's instances are launched."
   default     = "default"
+}
+
+variable "logging_service" {
+  description = "The logging service that the cluster should write logs to."
+  default     = "none"
+}
+
+variable "monitoring_service" {
+  description = "The monitoring service that the cluster should write metrics to."
+  default     = "none"
 }
