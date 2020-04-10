@@ -360,6 +360,33 @@ serial_number       71:0d:89:db:b8:8c:6f:d0:0a:f5:b1:46:65:52:1d:87:38:e2:28:60
 kubectl exec -it vault-0 -- vault write pki_int/revoke serial_number=71:0d:89:db:b8:8c:6f:d0:0a:f5:b1:46:65:52:1d:87:38:e2:28:60
 ```
 
+* Для включения tls в vault создать certificate signing request, подписать его Kubernetes CA, загрузить в k8s secrets и включить tls в конфигурации helm chart:
+
+  ```bash
+  # Создаем сертификат
+  misc/scripts/create_cert_via_k8s.sh
+
+  # Загружаем сертификат в k8s secrets
+  misc/scripts/store_cert_to_k8s_secrets.sh
+  ```
+
+  ```bash
+  # применяем новую конфигурацию для vault со включенным tls
+  helm upgrade --install vault ./vault-helm --values vault.values.yaml
+  ```
+
+  ```bash
+  # проверяем, что теперь vault использует tls
+  kubectl port-forward svc/vault 8200:8200
+  curl --cacert /tmp/vault.ca \                                                                                                                                                                                                                                             ─╯
+      -H "X-Vault-Token: s.nYJq9PW1SMF0uj7M91s2Q1wv" \
+      -H "X-Vault-Namespace: default" \
+      -X GET \
+      https://127.0.0.1:8200/v1/otus/otus-ro/config
+  {"request_id":"5bdc909f-c66f-19ef-b94e-3f76d35be416","lease_id":"","renewable":false,"lease_duration":2764800,"data":{"password":"asajkjkahs","username":"otus"},"wrap_info":null,"warnings":null,"auth":null}
+
+  ```
+
 ## EX-13.3 Как проверить проект
 
 ## EX-13.4 Как начать пользоваться проектом
