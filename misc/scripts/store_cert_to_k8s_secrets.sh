@@ -5,7 +5,7 @@ set -euo pipefail
 
 SCRIPTS_DIR=$(dirname "$(readlink --canonicalize-existing "$0")")
 
-# shellcheck source=/vault_cert.conf
+# shellcheck source=/dev/null
 source "${SCRIPTS_DIR}/vault_cert.conf"
 
 echo "Retrieve the certificate from k8s"

@@ -6,14 +6,14 @@ set -euo pipefail
 
 SCRIPTS_DIR=$(dirname "$(readlink --canonicalize-existing "$0")")
 
-# shellcheck source=/vault_cert.conf
+# shellcheck source=/dev/null
 source "${SCRIPTS_DIR}/vault_cert.conf"
 
 echo "Create a key for Kubernetes to sign."
 openssl genrsa -out "${TMPDIR}/vault.key" 2048
 
 echo "Create an openssl configuration"
-cat <<EOF >${TMPDIR}/csr.conf
+cat <<EOF >"${TMPDIR}/csr.conf"
 [req]
 req_extensions = v3_req
 distinguished_name = req_distinguished_name
@@ -39,7 +39,7 @@ openssl req -new    -key "${TMPDIR}/vault.key" \
 
 echo "Create the certificate"
 
-cat <<EOF >${TMPDIR}/csr.yaml
+cat <<EOF >"${TMPDIR}/csr.yaml"
 apiVersion: certificates.k8s.io/v1beta1
 kind: CertificateSigningRequest
 metadata:

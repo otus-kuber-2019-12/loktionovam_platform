@@ -31,7 +31,6 @@ data:
       EOH
     }
   vault-agent-config.hcl: |
-    # Uncomment this to have Agent run once (e.g. when running as an initContainer)
     exit_after_auth = true
     pid_file = "/home/vault/pidfile"
 

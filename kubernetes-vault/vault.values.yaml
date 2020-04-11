@@ -34,5 +34,5 @@ server:
     serviceType: "ClusterIP"
 
   extraVolumes:
-  - type: secret
-    name: vault-server-tls # Matches the ${SECRET_NAME} from misc/scripts/vault_cert.conf
+    - type: secret
+      name: vault-server-tls
