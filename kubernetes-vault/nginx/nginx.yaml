@@ -6,6 +6,7 @@ metadata:
   labels:
     app: web
   annotations:
+    # yamllint disable
     vault.hashicorp.com/agent-inject: "true"
     vault.hashicorp.com/role: "renew-pki"
     vault.hashicorp.com/agent-inject-secret-server.crt: "pki_int/issue/example-dot-ru"
@@ -19,6 +20,7 @@ metadata:
       {{ .Data.private_key }}
       {{- end }}
     vault.hashicorp.com/ca-cert: "/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+    # yamllint enable
 spec:
   serviceAccountName: vault-auth
   containers:
@@ -46,7 +48,8 @@ spec:
           path: /index.html
           port: 8000
           scheme: HTTPS
-      # some dirty hack here - reload the nginx configuration to process certificate renew
+      # some dirty hack here - reload the nginx configuration
+      # to process certificate renew
       livenessProbe:
         exec:
           command:

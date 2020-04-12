@@ -416,12 +416,126 @@
         bound_service_account_namespaces=default policies=pki-policy  ttl=24h
   ```
 
+* **Задача со** (*) Autounseal с использованием Transit Secrets Engine другого Vault (vault-transit):
+
+  ```bash
+  # настраиваем новый vault в котором будет включен Transit Secrets Engine
+  cp misc/scripts/vault_transit_cert.conf misc/scripts/vault_cert.conf
+  misc/scripts/create_cert_via_k8s.sh
+  misc/scripts/store_cert_to_k8s_secrets.sh
+
+
+  cd kubernetes-vault/
+  helm upgrade --install vault-transit ./vault-helm --values autounseal/vault-transit.values.yaml
+  kubectl exec -ti vault-transit-0 -- vault operator init --key-shares=1 --key-threshold=1
+  for POD_NUM in 0 1 2; do kubectl exec -it vault-transit-"${POD_NUM}" -- vault operator unseal;done
+
+  kubectl exec -ti vault-transit-0 -- vault login
+  kubectl exec -ti vault-transit-0 -- vault secrets enable transit
+
+  kubectl exec -ti vault-transit-0 -- vault write -f transit/keys/autounseal
+  kubectl cp autounseal/autounseal.hcl vault-transit-0:/tmp
+  kubectl exec -ti vault-transit-0 -- vault policy write autounseal /tmp/autounseal.hcl
+  kubectl exec -ti vault-transit-0 -- vault token create -policy="autounseal" -wrap-ttl=120
+
+  Key                              Value
+  ---                              -----
+  wrapping_token:                  s.2M06LPhYX4tSa8n2bBBWlzN9
+  wrapping_accessor:               jNGpcZcel6IdBbbF5mvWIifS
+  wrapping_token_ttl:              2m
+  wrapping_token_creation_time:    2020-04-12 09:05:43.882065894 +0000 UTC
+  wrapping_token_creation_path:    auth/token/create
+  wrapped_accessor:                skQczoHqRc72HhmNWaqGLj28
+
+  ```
+
+  ```bash
+  # создаем token для доступа к vault-transit и загружаем его, как k8s secrets vault-transit-token
+  vault exec -ti vault-transit-0 -- /bin/sh
+  vault token create -policy="autounseal" -wrap-ttl=120
+  Key                              Value
+  ---                              -----
+  wrapping_token:                  s.IVei3NzI9bFvCRt2yzKv6vgq
+  wrapping_accessor:               kvzO6TAfYmeNFJ6xLevuakoN
+  wrapping_token_ttl:              2m
+  wrapping_token_creation_time:    2020-04-12 09:13:39.69151688 +0000 UTC
+  wrapping_token_creation_path:    auth/token/create
+  wrapped_accessor:                k5zEeLEA3FihjJzdaPJI23fe
+
+  $ VAULT_TOKEN="s.IVei3NzI9bFvCRt2yzKv6vgq" vault unwrap
+  Key                  Value
+  ---                  -----
+  token                s.So8Um4d4XY23tTVJbUmyp7ZE
+  token_accessor       k5zEeLEA3FihjJzdaPJI23fe
+  token_duration       768h
+  token_renewable      true
+  token_policies       ["autounseal" "default"]
+  identity_policies    []
+  policies             ["autounseal" "default"]
+
+  $ exit
+
+  kubectl create secret generic vault-transit-token --from-literal=token='s.So8Um4d4XY23tTVJbUmyp7ZE'
+  ```
+
+  ```bash
+  # устанавливаем vault со включенным unseal через transit
+
+  helm upgrade --install vault ./vault-helm --values vault.values.yaml
+  # если vault для которого настраивается unseal - новая инсталляция
+  kubectl exec -ti vault-0 -- vault operator init -recovery-shares=1 -recovery-threshold=1
+  Recovery Key 1: 2Ev9WRlPyPoheXuWWz+iXFzu3GKqqkg81cLzSLF5JsI=
+
+  Initial Root Token: s.5xgwi0IuFquU8likGRG3Q8UO
+
+  Success! Vault is initialized
+
+  Recovery key initialized with 1 key shares and a key threshold of 1. Please
+  securely distribute the key shares printed above.
+
+  # если уже существует инсталляция, нужно сделать unseal migration
+  kubectl exec -ti vault-0 -- vault operator unseal -migrate
+  ```
+
+  ```bash
+  # Проверим, что unseal работает - удалим pod, контроллер пересоздаст новый и новый pod будет autounsealed
+  kubectl delete pods/vault-0
+  kubectl logs vault-0
+  ==> Vault server configuration:
+
+                Seal Type: transit
+          Transit Address: https://vault-transit:8200
+          Transit Key Name: autounseal
+        Transit Mount Path: transit/
+              Api Address: https://10.244.3.15:8200
+                      Cgo: disabled
+          Cluster Address: https://10.244.3.15:8201
+                Listener 1: tcp (addr: "[::]:8200", cluster address: "[::]:8201", max_request_duration: "1m30s", max_request_size: "33554432", tls: "enabled")
+                Log Level: info
+                    Mlock: supported: true, enabled: false
+            Recovery Mode: false
+                  Storage: consul (HA available)
+                  Version: Vault v1.3.3
+
+  ==> Vault server started! Log data will stream in below:
+
+  2020-04-12T10:02:20.326Z [INFO]  proxy environment: http_proxy= https_proxy= no_proxy=
+  2020-04-12T10:02:20.326Z [WARN]  storage.consul: appending trailing forward slash to path
+  2020-04-12T10:02:20.367Z [INFO]  core: stored unseal keys supported, attempting fetch
+  2020-04-12T10:02:20.379Z [INFO]  core.cluster-listener: starting listener: listener_address=[::]:8201
+  2020-04-12T10:02:20.379Z [INFO]  core.cluster-listener: serving cluster requests: cluster_listen_address=[::]:8201
+  2020-04-12T10:02:20.380Z [INFO]  core: entering standby mode
+  2020-04-12T10:02:20.381Z [INFO]  core: vault is unsealed
+  2020-04-12T10:02:20.381Z [INFO]  core: unsealed with stored keys: stored_keys_used=1
+
+  ```
+
 ## EX-13.3 Как проверить проект
 
 * Сертификат nginx до обновления:
  ![nginx-before-renew](img/ex-13-kubernetes-vault-cert-1.png)
 
-* Сертифика nginx после обновления:
+* Сертификат nginx после обновления:
 ![nginx-after-renew](img/ex-13-kubernetes-vault-cert-2.png)
 
 ## EX-13.4 Как начать пользоваться проектом

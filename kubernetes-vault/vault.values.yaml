@@ -8,6 +8,10 @@ server:
     enabled: false
   extraEnvironmentVars:
     VAULT_CACERT: /vault/userconfig/vault-server-tls/vault.ca
+  extraSecretEnvironmentVars:
+    - envName: VAULT_TOKEN
+      secretName: vault-transit-token
+      secretKey: token
 
   ha:
     enabled: true
@@ -25,10 +29,16 @@ server:
         tls_client_ca_file = "/vault/userconfig/vault-server-tls/vault.ca"
       }
       storage "consul" {
-        path = "vault"
+        path = "vault-1"
         address = "HOST_IP:8500"
       }
 
+      seal "transit" {
+        address = "https://vault-transit:8200"
+        disable_renewal = "false"
+        key_name = "autounseal"
+        mount_path = "transit/"
+      }
   ui:
     enabled: true
     serviceType: "ClusterIP"
