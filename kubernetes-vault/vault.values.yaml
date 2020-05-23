@@ -1,0 +1,48 @@
+---
+
+global:
+  tlsDisable: false
+
+server:
+  standalone:
+    enabled: false
+  extraEnvironmentVars:
+    VAULT_CACERT: /vault/userconfig/vault-server-tls/vault.ca
+  extraSecretEnvironmentVars:
+    - envName: VAULT_TOKEN
+      secretName: vault-transit-token
+      secretKey: token
+
+  ha:
+    enabled: true
+    config: |
+      disable_mlock = true
+      ui = true
+      cluster_addr = "https://POD_IP:8201"
+
+      listener "tcp" {
+        tls_disable = 0
+        address = "[::]:8200"
+        cluster_address = "[::]:8201"
+        tls_cert_file = "/vault/userconfig/vault-server-tls/vault.crt"
+        tls_key_file  = "/vault/userconfig/vault-server-tls/vault.key"
+        tls_client_ca_file = "/vault/userconfig/vault-server-tls/vault.ca"
+      }
+      storage "consul" {
+        path = "vault-1"
+        address = "HOST_IP:8500"
+      }
+
+      seal "transit" {
+        address = "https://vault-transit:8200"
+        disable_renewal = "false"
+        key_name = "autounseal"
+        mount_path = "transit/"
+      }
+  ui:
+    enabled: true
+    serviceType: "ClusterIP"
+
+  extraVolumes:
+    - type: secret
+      name: vault-server-tls

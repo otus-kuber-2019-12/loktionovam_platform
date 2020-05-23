@@ -141,7 +141,7 @@ kind create cluster --config bootstrap/k8s/kind-config.yaml
 ## k8s API
 
 ```bash
-export CLUSTER_NAME="minikube"
+export CLUSTER_NAME="$(kubectl config current-context)"
 APISERVER=$(kubectl config view -o jsonpath="{.clusters[?(@.name==\"$CLUSTER_NAME\")].cluster.server}")
 TOKEN=$(kubectl get secrets -o jsonpath="{.items[?(@.metadata.annotations['kubernetes\.io/service-account\.name']=='default')].data.token}"|base64 --decode)
 curl -X GET $APISERVER/api --header "Authorization: Bearer $TOKEN" --insecure

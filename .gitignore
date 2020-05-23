@@ -8,3 +8,6 @@
 .terraform/
 *.tgz
 *.pyc
+kubernetes-vault/consul-helm
+kubernetes-vault/vault-helm
+kubernetes-vault/vault-guides
