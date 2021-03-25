@@ -1,4 +1,4 @@
 kopf == 0.25
-PyYAML == 5.3
+PyYAML == 5.4
 kubernetes == 10.0.1
 jinja2 == 2.11.1
